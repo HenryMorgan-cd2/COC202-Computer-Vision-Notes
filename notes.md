@@ -27,7 +27,7 @@
 			* [Gamma (power law) transformation](#gamma-power-law-transformation)
 		* [Image Histograms](#image-histograms)
 			* [Linear interpolation](#linear-interpolation)
-		* [Contrast Stretching](#contrast-stretching)
+		* [Contrast/Histogram Stretching](#contrasthistogram-stretching)
 			* [Dynamic Range](#dynamic-range)
 			* [Thresholding](#thresholding)
 		* [Histogram Equalization](#histogram-equalization)
@@ -58,7 +58,7 @@
 		* [Morphological Hit-or-Miss Transform](#morphological-hit-or-miss-transform)
 		* [Morphological Corner Detection](#morphological-corner-detection)
 		* [Morphological Thinning](#morphological-thinning)
-	* [Week 4 - Content­‐based image retrieval](#week-4-contentbased-image-retrieval)
+	* [Topic 4 - Content­‐based image retrieval](#topic-4-contentbased-image-retrieval)
 		* [Traditionally](#traditionally)
 		* [Content-Based](#content-based)
 			* [Color](#color)
@@ -86,7 +86,7 @@
 		* [Image Classification](#image-classification)
 		* [R-trees](#r-trees)
 			* [Retrieval](#retrieval)
-	* [Week 5 - Image database visualization and browsing](#week-5-image-database-visualization-and-browsing)
+	* [Topic 5 - Image database visualization and browsing](#topic-5-image-database-visualization-and-browsing)
 		* [Image databsae browsing](#image-databsae-browsing)
 		* [Mapping based visualisation](#mapping-based-visualisation)
 			* [PCA (Principal component analysis)](#pca-principal-component-analysis)
@@ -120,7 +120,34 @@
 			* [Annotation task](#annotation-task)
 			* [User opinion](#user-opinion)
 		* [Summary](#summary)
-	* [Week 8 - Image compression](#week-8-image-compression)
+	* [Topic 6 - Colour consistancy and colour invariance](#topic-6-colour-consistancy-and-colour-invariance)
+		* [Adding Colour](#adding-colour)
+		* [Colour based image retrieval(Uses QBE)](#colour-based-image-retrievaluses-qbe)
+			* [Advantages of colour indexing](#advantages-of-colour-indexing)
+		* [Colour image formation](#colour-image-formation)
+			* [Chromaticity space](#chromaticity-space)
+			* [Illuminants](#illuminants)
+			* [Computational colour constancy](#computational-colour-constancy)
+				* [Greyworld colour constancy](#greyworld-colour-constancy)
+				* [MaxRGB colour constancy](#maxrgb-colour-constancy)
+				* [Dichromatic reflection model](#dichromatic-reflection-model)
+				* [Matte, Lambertian or Body reflectance](#matte-lambertian-or-body-reflectance)
+				* [Highlight, specular or interface reflectance](#highlight-specular-or-interface-reflectance)
+				* [Dichromatic reflectance](#dichromatic-reflectance)
+	* [Topic 7 - Texture](#topic-7-texture)
+		* [Applications](#applications)
+		* [Texture Measures](#texture-measures)
+			* [Statistical Descriptors](#statistical-descriptors)
+			* [Co-occurrence matrix](#co-occurrence-matrix)
+			* [Co-occurance features](#co-occurance-features)
+			* [LBP (Local binary patterns)](#lbp-local-binary-patterns)
+				* [Circular LBP](#circular-lbp)
+				* [Rotation Invariant LBP](#rotation-invariant-lbp)
+				* [Uniform LBP](#uniform-lbp)
+				* [Multi-scale LBP](#multi-scale-lbp)
+				* [Multi-dimensional LBP](#multi-dimensional-lbp)
+		* [Summary](#summary-1)
+	* [Topic 8 - Image compression](#topic-8-image-compression)
 		* [Runlength coding](#runlength-coding)
 		* [Differential coding](#differential-coding)
 		* [Entropy coding - Huffman coding :D](#entropy-coding-huffman-coding-d)
@@ -133,11 +160,11 @@
 				* [Examples](#examples)
 			* [Quantisation](#quantisation)
 			* [Entropy Compression](#entropy-compression)
-			* [Summary](#summary-1)
+			* [Summary](#summary-2)
 			* [Decompression](#decompression)
 			* [Compression vs Retieval](#compression-vs-retieval)
 			* [JPEG CBIR](#jpeg-cbir)
-		* [Summary](#summary-2)
+		* [Summary](#summary-3)
 
 <!-- /code_chunk_output -->
 
@@ -147,8 +174,6 @@
 ## Topic 1 - Introduction and Fundamentals
 
 [Week 1 - PDF](http://learn.lboro.ac.uk/mod/resource/view.php?id=298724)
-
-
 
 ### Images
 
@@ -359,7 +384,8 @@ Piecewise linear transform based on pair of pixel mappings (r<sub>1</sub>, s<sub
 (r<sub>1</sub>, s<sub>1</sub>) - (r,<sub>2</sub>, s<sub>2</sub>)
 (r,<sub>2</sub>, s<sub>2</sub>) - (max, max)
 </code></pre>
-### Contrast Stretching
+
+### Contrast/Histogram Stretching
 
 #### Dynamic Range
 
@@ -854,7 +880,7 @@ E.g.
 
 ----------------------
 
-## Week 4 - Content­‐based image retrieval
+## Topic 4 - Content­‐based image retrieval
 
 [PDF](http://learn.lboro.ac.uk/pluginfile.php/480347/mod_resource/content/6/COC202_1718_lect_04.pdf)
 
@@ -1198,7 +1224,7 @@ The search is based on the overlap of bounding boxes and the query region.
 ----------------------
 
 
-## Week 5 - Image database visualization and browsing
+## Topic 5 - Image database visualization and browsing
 
 [PDF](http://learn.lboro.ac.uk/pluginfile.php/481561/mod_resource/content/7/COC202_1718_lect_05.pdf)
 
@@ -1570,7 +1596,100 @@ Visualisation space not optimally used.
 
 ----------------------
 
-## Week 7 - Texture
+
+
+## Topic 6 - Colour consistancy and colour invariance
+
+### Adding Colour
+- Light can be split into colours
+- Colours can be added together
+
+Our retinas percieve colour using cones. We have red, green and blue cones.
+
+### Colour based image retrieval(Uses QBE)
+1. A colour histogram can be created for each image in a database, where the colour histogram is equal to the index that each image is saved under.
+2. A query image is input and a colour histogram is created for that image. The histogram intersection between the query image and all images in the database are compared.
+3. Rank images bu intersection score
+4. Show top results to user
+
+#### Advantages of colour indexing
+- Simple technique
+- Good retrieval performance
+- Not affected by rotations or translations
+- Robust to occlusion
+
+### Colour image formation
+![Colour Image Formation](images/colour-image-formation.png)
+
+>**Chromaticity** - An objective specification of the quality of a color regardless of its luminance.
+
+#### Chromaticity space
+- Ignores intensity information
+- Invariant to imaging geometry
+- Invariant to shading
+
+#### Illuminants
+Image colour changes depending on illuminant
+![example](images/different-illuminant.png)
+
+Illumination change can be modelled with a relatively simple model.
+Two images are a linear transformation away if:
+I<sub>1</sub> = I<sub>2</sub>*T
+or if using the diagonanl model:
+I<sub>1</sub> = I<sub>2</sub>*D
+where:
+I<sub>1</sub> = 1D matrix (R<sub>1</sub>, G<sub>2</sub>, B<sub>3</sub>)
+& I2 = 1D matrix (aR<sub>1</sub>, bG<sub>2</sub>, gB<sub>3</sub>)
+
+#### Computational colour constancy
+Is the estimation of the illuminant colour and can be used to colour correct images.
+There are two main approaches:
+- Statistical colour constancy algorithms:
+	+ e.g. Greyworld, maxRGB
+	+ Correlate the statistics of colours in an image with statistical knowledge about lights and surfaces.
+	+ works well if there are many surfaces in the scene
+	+ only works for a limited colour diversity
+- Physics-based colour constancy algorithms:
+	+ e.g. Dichromatic colour constancy
+	+ Based on understanding on how physical processes manifest themselves in images. e.g. shadows, interreflections
+	+ can give a solution even if there are very few surfaces in a scene.
+	+ Difficult to make work outside the lab
+
+##### Greyworld colour constancy
+Assumes the mean of each image is the same(grey).
+alpha = mean(R)
+beta = mean(G)
+gamma = mean(B)
+![Greyworld equations](images/greyworld-equations.png)
+
+##### MaxRGB colour constancy
+Also known as white patch retinex.
+Assumes that the brightest patch in the scene is a white patch.
+![MaxRGB equations](images/maxrgb-equations.png)
+
+##### Dichromatic reflection model
+*Note:* I don't really know what this means
+- Valid for inhomogeneous dielects: -paints plastics, papers, textiles etc
+- States that the reflected light from an object has two parts:
+	+ body reflection
+	+ interface reflection
+- both parts are comprised of:
+	+ spectral power distribution of the respective reflectance
+	+ geometry depending scale factor
+
+##### Matte, Lambertian or Body reflectance
+![body reflectance diagram](images/body-reflectance.png)
+
+##### Highlight, specular or interface reflectance
+![interface reflection diagram](images/interface-reflectance.png)
+
+##### Dichromatic reflectance
+![Dichromatic reflectance diagram](images/dichromatic-reflectance.png)
+
+
+----------------------
+
+## Topic 7 - Texture
 [PDF](http://learn.lboro.ac.uk/pluginfile.php/489474/mod_resource/content/9/COC202_1718_lect_07.pdf)
 
 Textures are relatively easy to understand and recognise visually, but quite hard to define.
@@ -1764,7 +1883,7 @@ In an MD-LBP a multi-dimensional histogram is built.
 
 ----------------------
 
-## Week 8 - Image compression
+## Topic 8 - Image compression
 [PDF](http://learn.lboro.ac.uk/pluginfile.php/488397/mod_resource/content/8/COC202_1718_lect_08.pdf)
 
 *Reduce the amount of bits to store an image*
