@@ -110,8 +110,16 @@
 				* [Zooming](#zooming)
 				* [Magnification](#magnification)
 			* [Vertical browsing](#vertical-browsing)
+			* [Graph-based browsing](#graph-based-browsing)
 			* [Time-based browsing](#time-based-browsing)
 		* [A Browsing Application](#a-browsing-application)
+		* [Evaluation of image browsing systems](#evaluation-of-image-browsing-systems)
+			* [Target Search](#target-search)
+			* [Category search](#category-search)
+			* [Journalistic task](#journalistic-task)
+			* [Annotation task](#annotation-task)
+			* [User opinion](#user-opinion)
+		* [Summary](#summary)
 	* [Week 8 - Image compression](#week-8-image-compression)
 		* [Runlength coding](#runlength-coding)
 		* [Differential coding](#differential-coding)
@@ -125,11 +133,11 @@
 				* [Examples](#examples)
 			* [Quantisation](#quantisation)
 			* [Entropy Compression](#entropy-compression)
-			* [Summary](#summary)
+			* [Summary](#summary-1)
 			* [Decompression](#decompression)
 			* [Compression vs Retieval](#compression-vs-retieval)
 			* [JPEG CBIR](#jpeg-cbir)
-		* [Summary](#summary-1)
+		* [Summary](#summary-2)
 
 <!-- /code_chunk_output -->
 
@@ -1562,6 +1570,199 @@ Visualisation space not optimally used.
 
 ----------------------
 
+## Week 7 - Texture
+[PDF](http://learn.lboro.ac.uk/pluginfile.php/489474/mod_resource/content/9/COC202_1718_lect_07.pdf)
+
+Textures are relatively easy to understand and recognise visually, but quite hard to define.
+
+Texture relates to an area/neighborhood not individual pixels. (even though we may calculate texture measures per pixel)
+
+Typically whether somthing is refered to a texture is to do with the distance being viewed from (think texture vs shape)
+
+Texture can be defined as variation in intensity of a particular surface or region of an image.
+This characteristic variation should allow us to describe and recognise it, as well as outline its boundry
+
+### Applications
+- **Detection** Diserning objects from background.
+- **Segmentation** separating image regions
+- **Boundry detection** e.g skin lesion segmentation
+- **Retrieval**
+- **classification** e.g human cell identification, nailfold capillaroscopy
+- **sysnthesis** computer generated new images
+
+### Texture Measures
+
+Texture = a visual pattern of **repeated elements** that have some variation in **appearance** and **relative position**.
+
+Repeated elements are known as: *texture primitives* or *texels*
+Texels can vary:
+- slowly or rapidly
+- with a high or low degree of directionality
+- with a greater or lesser degree of regularity
+
+- regularity is generally taken as key to determine if texture is regular/periodic (such as zebra) or random/stochastic (like clouds)
+
+![Different regularities of textures](images/textureregularity.png)
+
+#### Statistical Descriptors
+Statistical approaches yield categorization of textures as smooth, course, grainy, etc.
+
+Each texture is described by a feature vector or poperties/features.
+
+One of the similest appraches to describe texture is to use statistical moments of the intensity histogram of an image or region.
+
+Let <code>P(Z<sub>i</sub>), i=0,1,...,L-1</code>, be the histogram of an image z with L distinct intensity levels.
+
+**Mean value (average intensity)**
+![Average intensity formula](images/averageintensityformula.png)
+
+**Variance σ<sup>2</sup> / second order moment μ<sub>2</sub>(z)**
+Measure of contrast
+![Second order moment formula](images/secondordermomentformula.png)
+
+- Smoothness
+	- 0 for areas of constant intensity
+![smoothness formula](images/smoothnessformula.png)
+
+**Third order moment**
+Measure of the skewness of histogram
+![third order moment formula](images/thirdordermomentformula.png)
+
+**Energy/uniformity**
+High for narrow histograms (1 for uniform image)
+![energy/uniformity formula](images/energyuniformityformula.png)
+
+**Entropy**
+Measure of randomness
+![smoothness formula](images/entropyformula.png)
+
+> Example of these measures on slide 20
+
+Segmentation of texels using statiscal descriptors is difficult in real images. Since descriptors are image/region based.
+Histograms carry no information regarding the relative positions of pixels with respect to each other.
+While this apprach is less intuitive and may not perform too well, the advantage is simplicty and hence computational efficiency.
+
+#### Co-occurrence matrix
+Considers the relative positions of pixels in an image (as well as the distribution of intensities)
+
+Based on an operator that defines the position of two pixels relative to each other.
+- e.g left/bottom/+45deg/-45deg neighour at a certain distance (e.g 1)
+
+An element of the co-occurances matrix gives the frequency that pixel pairs with two such intensities occur in the image according to the image defined operator.
+	- The two intensities define the row/column of the matrix element
+
+E.g. operatator = "one pixel immediately to the right"
+![Co-occurances example](images/cooccurancesexample.png)
+> There is an imcomplete grid on slide 24 to try. No answers provided though.
+
+#### Co-occurance features
+Rather than using the matric directly, we calculate various descriptors from the matrix.
+
+Simple descriptors (form basis of other ones):
+![Simple cooccurrence feature descriptors](images/simplecooccurrencedescriptors.png)
+
+**Max probability**
+measures the strongest respnse of the matrix
+<code>max(P<sub>ij</sub>)</code>
+
+**Correlation**
+Measure of how correlated pixels are with their neighbours
+![Correlation co-occurrance feature](images/correlationcooccurrancefeature.png)
+
+**Energy**
+Measures uniformity of the matrix.
+![Energy co-occurrence feature formula](images/energycooccurrencefeature.png)
+
+**Contrast**
+Measures image contrast...
+![Contrast co-occurrence feature formula](images/contrastcooccurrencefeature.png)
+
+**Homogeneity**
+Measures the spatial closeness of the distribution of the lemenets to the diagonal.
+![Homogeneity co-occurrence feature formula](images/homogeneitycooccurrencefeature.png)
+
+**Entropy**
+Measures the randomness of the matrix elements.
+![Entropy co-occurrence feature formula](images/entropycooccurrencefeature.png)
+
+
+#### LBP (Local binary patterns)
+> This was covered earlier. So may want to do some unification.
+
+Encodes the relationship of a pixel to its local neighborhood in the form of a **binary pattern**.
+
+Basic LBP operates on a per-pixel basis and descripes the 8-neighborhood pattern in binary.
+
+```javascript
+  6 5 2                     1 0 0
+  7 6 1   ===threshold===>  1   0
+  8 8 7                     1 1 1
+                           <- ^ Start
+
+  sequence = 11110001 = 241
+```
+
+##### Circular LBP
+Instead of the 8-neighborhood, a circular neighborhood at a set pixel distances can be employed.
+
+![Circular neighborhood](images/circularpixelneighbourhood.png)
+
+This results in some points not falling directly on a pixel. Here, we **interpolate**.
+
+##### Rotation Invariant LBP
+If the texture is rotated then the binary patterns produced will change.
+
+Rotation invariance can be obtained by grouping all possible rotations together.
+This can be done by considering the unique minimal value of binary patterns.
+- Perform all possible rotations (through bitshifts)
+- minumun of these gives the selected value
+
+![Rotation invariant lbp example](images/rotationinvariantlbp.png)
+
+There are 36 patterns for 8-neighborhoods.
+> Examples of this on 33 and 34
+
+##### Uniform LBP
+Certain binary patterns are fundamental properties of texture
+- Sometimes frequency > 90%
+- these are **uniform** patterns and are defined by a uniformity measure.
+- Uniformity measure can be defined by the number of spatial transitions (changes from 0 to 1 or 1 to 0) in the LBP code. (we typically consider maximum of 2 changes).
+
+In uniform LBP, only uniform patterns are recorded in sparate bins; other codes summarised in single bin.
+
+> example of this on slide 37
+
+This can aslo be combined with rotation invariant LBPs to form: Rotation invariant uniform LBP!!!!
+> Slide 36
+
+##### Multi-scale LBP
+Texture occurs at different scales.
+LBP descriptors can be calculated at different scales by **varying the radius** of the neighborhood.
+
+Multi-scale LMP is thus composed by applying LMP with diferent radii to obtain a texture representation at multiple scales
+![Multiscale LBP example neighbourhoods](images/multiscalelbp.png)
+
+##### Multi-dimensional LBP
+In conventional multi-scale LBP, the histograms corresponding to different radii are simply concarenated to generate a singel dimensional feature vector.
+This results in a loss of infomation between different scales and added ambiguity.
+
+In an MD-LBP a multi-dimensional histogram is built.
+
+> An example is show on slide 40.
+
+**Potential Problem**: dimensionality of resulting histogram (10x10x10 for rotation invariant uniform LBP at 3 scales)
+
+
+### Summary
+- Textures are easy to understand but hard to define
+- There is a variety of texture descriptors used in computer vision
+	-	statistical texture features
+	- co-occurrence matrix
+	- local binary patterns
+		- Basic, roation, invariant, uniform, multi-scale, multi-dimensional
+
+
+----------------------
 
 ## Week 8 - Image compression
 [PDF](http://learn.lboro.ac.uk/pluginfile.php/488397/mod_resource/content/8/COC202_1718_lect_08.pdf)
