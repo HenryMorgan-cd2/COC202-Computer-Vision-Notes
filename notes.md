@@ -483,7 +483,7 @@ Calculate CDF<sub>2</sub> of image 2 (target image)
 
 For each greylevel G<sub>1</sub> in image 1: Find greylevel G<sub>2</sub> so that:
 
-CDF<sub>1</sub> (G<sub>1</sub>) = CDF<sub>2</sub> (G<sub>1</sub>) (look for closest match)
+CDF<sub>1</sub> (G<sub>1</sub>) = CDF<sub>2</sub> (G<sub>2</sub>) (look for closest match)
 
 Identified greylevel then gives the mapping: G<sub>1</sub> -> G<sub>2</sub>
 
