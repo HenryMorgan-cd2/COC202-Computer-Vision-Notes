@@ -87,6 +87,31 @@
 		* [R-trees](#r-trees)
 			* [Retrieval](#retrieval)
 	* [Week 5 - Image database visualization and browsing](#week-5-image-database-visualization-and-browsing)
+		* [Image databsae browsing](#image-databsae-browsing)
+		* [Mapping based visualisation](#mapping-based-visualisation)
+			* [PCA (Principal component analysis)](#pca-principal-component-analysis)
+				* [<review-of-basic-stuff&gt;](#review-of-basic-stuffgt)
+				* [Procedure](#procedure)
+				* [Usage](#usage)
+				* [For Feature Reduction](#for-feature-reduction)
+				* [For (face) recognition](#for-face-recognition)
+				* [For image database visualisation](#for-image-database-visualisation)
+			* [MDS (Multi-dimensional scaling)](#mds-multi-dimensional-scaling)
+				* [For image database visualisation](#for-image-database-visualisation-1)
+		* [Clustering-based visualisation](#clustering-based-visualisation)
+			* [K-Means](#k-means)
+				* [For image segmentation](#for-image-segmentation)
+		* [Heiarchical clustering for image browsing](#heiarchical-clustering-for-image-browsing)
+			* [Dealing with overlap](#dealing-with-overlap)
+		* [Graph-based visualisation](#graph-based-visualisation)
+		* [Browsing](#browsing)
+			* [Horizontal browsing](#horizontal-browsing)
+				* [Panning](#panning)
+				* [Zooming](#zooming)
+				* [Magnification](#magnification)
+			* [Vertical browsing](#vertical-browsing)
+			* [Time-based browsing](#time-based-browsing)
+		* [A Browsing Application](#a-browsing-application)
 	* [Week 8 - Image compression](#week-8-image-compression)
 		* [Runlength coding](#runlength-coding)
 		* [Differential coding](#differential-coding)
@@ -1231,7 +1256,7 @@ There are 2 mean tasks:
 	- Feature reduction, compression
 	- visualisation
 
-##### Review of basic stuff
+##### <review-of-basic-stuff&gt;
 > Slides 16-19 for formulae
 
 - Mean
@@ -1255,27 +1280,285 @@ There are 2 mean tasks:
 	- can normalize (to unit length)
 	- ![eigenvector formula](images/eigenvectorformula.png)
 	- ![eigenvector examples](images/eigenvectorexamples.png)
+	- for an NxN matix we can compute N eigenvectors
+	- eigenvectors are othogonal
+		- orthonormal for unit length eigenvectors
+	- can be calculated by an iterative process
+		-	in matlab it is done with the `eig()` method
+> **orthonormal** *adjective* - both orthogonal and normalized.
 
+**<review-of-basic-stuff /&gt;**
 
+##### Procedure
+1. calculate covariance matrix of data
+2. compute eigenvectors of the covariance matrix
+3. sort eigenvectors by corresponding eigenvalues
+	-	sorts the vectors by importance
+	- captured variance given by eigenvalues
+	- **sorted eigenvectors = principal components (PCs)**
+4. Project data onto space spanned by PCs
+	- matrix containing eigenvectors can be used as projection matrix
+	- multiplication with data matrix
+
+##### Usage
+- Data projected into new space spanned by PCs.
+	- PCs are weighted sums of original data axes.
+- Projection itself is lossless
+	- Data has same dumensionality
+	- can be fully recovered through inverse transform
+- we can also project into a lower-dimensional space
+	-	space spanned by k PCs with largest eigenvalues
+	- captures most important information
+	- other data can be discared without losing much infomation
+	- reconstructed data close to original.
+
+> Slide 22 shows a flow chart of doing/using PCA
+
+##### For Feature Reduction
+- High-dimensional features for classification, retieval, etc
+<br />
+- run PCA on data.
+- select k PCs to define new feature space.
+- project data into new space.
+	- co-ordinates/weights in new space = new (reduced) features
+- Use new features for classification, retieval, etc.
+<br />
+- Often gives comparable or possibly even better results than original features.
+
+##### For (face) recognition
+- Normalised face images treated as data vectors
+- run PCA on that data
+	-	pick k PCs = eigenfaces
+- Face represented by co-ordinates/weights in new space.
+- Face recognition e.g by finding closest face in new space (Euclidean distance)
+
+##### For image database visualisation
+- Images represented by high-dimensional feature vectors
+- perform PCA on image feature data.
+- take first 2 (or 3) principal components to define visualisation space.
+- Project feature vectors into low-dimensional space
+- plot image thumbnails at calculated co-ordinates
+- similar images will get projected to similar locations
 
 ----------------------
 
-
 #### MDS (Multi-dimensional scaling)
-#### Dealing with overlap
+- Projection to lower dimensional space.
+- attempts to best preserve the original distances
+- based on pair-wise distances between samples
+	- square (triangular) matrix
+	- can use any kind of distances
+	- no need for actual data vectors
+- intial configuration
+	- e.g through PCA
+<br />
+- Iterativly change configuration to better fit the data
+	- minimise stress
+- MDS will allow for more accurate representation
+	- Inherently similarity/distance based
+	- Allows for other distances than L<sub>2</sub>
+- But also is slower
+
+##### For image database visualisation
+- Obtain distances between images (from feature vectors or otherwise)
+- Decide on dimensionality of projections (typically 2)
+- generate initial configuration
+- perform MDS
+- plot image thumbnails at calculated co-ordinates
+<br />
+Similar images will get projected to similar locations
+
+----------------------
 
 ### Clustering-based visualisation
-#### K-means clustering
+- similar images are grouped together
+- groups can be summarised by representative images.
+<br />
+- Content-based
+	- using CBIR features of the images
+- Metadata-based
+	- Uses keywords
+	- filenames
+	- etc
+- Time-based
+	- Using image creation date
+
+#### K-Means
+- equal grouping of similar samples into groups (clusters)
+- most popular algo is k-means
+
+1. Initialize k cluster centers (randomly)
+2. map each sample to its closest cluster center
+3. recalculate each cluster center as the center of mass of all its samples
+4. go to step 2 until convergence (clusters don't change)
+
+##### For image segmentation
+- divide an image up into different regions corresponding to objects.
+	-	its hard
+	- many techniques
+- K-means clustering can be used
+	- select k (not easy)
+	- samples = pixels
+	- data for each sample = intensity (greyscale) or RGB (color)
+	- run k-means using that data
+	- "Divide" image according to clusters
+
+
+### Heiarchical clustering for image browsing
+- Hierarchical clustering
+	- iterative merging of two most similar clusters to form new cluster
+		- until only 1 cluster remains
+	- retain old clusters
+- Through clusting, a tree structure is obtained
+	- Used for navigation
+	- representative images for cluster
+
+----------------------
+
+#### Dealing with overlap
+> Slide 27-28
+Positions generated for image visualisation will often lead to images overlapping one another. Images can be partly or totally occluded. The solution is to move the images, possibly arrange into a grid.
+
+- Fill empty cells on grid by moving cells across from neighbouring cells.
+- Place - bump - double bump
+	-	place: into empty neighbouring cell
+	- bump: neighboring image into 2nd ring them bump
+
+----------------------
 
 ### Graph-based visualisation
 
+Arrange images into a graph structure
+- Nodes = images
+- Edges based on shared annotation / image similarity
+
+<br/>
+
+- Visualisation - mass-spring models
+	- edges modelled as springs
+	- rest length based on edge weight/strength
+	- find stable layout (set of differential equations)
+----------------------
+
 ### Browsing
+
+- Visualisation on its own is useful but not too much
+- Navigation through visualised image database
+- Interactivity and intuitive operations crucial
+
 #### Horizontal browsing
+- Navigation within a single screen of visualised images
+- This type of browsing is often useful when an image database has been visualised through a mapping or graph-based scheme, or a visualisation of a single cluster of images.
+
+##### Panning
+If the entire visualised image collection cannot be displated simultaneously on a screen, a panning function is required in order to move around the visualisation.
+
+##### Zooming
+If many images are on a single 2D plane, will be too small to distinguish.
+
+Useful to have a facility to zoom into an area of interest.
+
+##### Magnification
+Although similar to zooming, magnification usally occurs when a cursor is placed over an image
+> true madness
+
+Fisheye lens distorts images around cursor.
+
 #### Vertical browsing
+In visualisation approaches based on a hierarchical structure, images can be navigated using vertical browsing.
+
+Clusters of images are typically visualised through use of representative images.
+
+These images are cruscial for vertical browsing as these are typically the reason for which a vertical browsing step into the next level of the hierarchy is initiated.
+
+As a result, images belonging to the cluster but not shown previously, are presented to the user
+
+![Vertical browsing visualised](images/verticalbrowsing.png)
+
+#### Graph-based browsing
+Operations such as panning and zooming can in general be applied to graph-based visualisations.
+
+In addition navidation can be performed following the edges that connect images.
+
 #### Time-based browsing
 
+Time stamp infomationattached to images can be used arrange and visualise image collections.
+Clearly if a collection is visualised based on temporal concepts, browsing should also be possible based on time.
+Often clustering-based, using representative images for clusters that correspond to certain time periods.
+
+----------------------
+
 ### A Browsing Application
-Hue sphere image browser
+**Hue sphere image browser**
+
+> Slides 54-65
+
+
+Attribute extraction:
+- extract median colour
+- hue and lightness (between 0 and 360 degs. It uses cos)
+
+These values are used as x, and y values respectivly.
+All images from DB are mapped onto a globe.
+Visualisation space not optimally used.
+
+**Heirachical hue sphere** arranges images into a grid on a sphere. This means the space is better utilised.
+
+### Evaluation of image browsing systems
+- How do we know whether an image browsing system is useful and effective not just awesome looking?
+- How do we know that it will facilitate work?!
+- Given two browsers how do you determine which is better
+
+#### Target Search
+- Give user an allocated time to search for a specific image.
+	- also applicabale to traditional CBIR approaches
+	- can compare browsing vs retrieval
+- Simplest to conduct
+	-	most common test
+- Can be aceraged for a set of queries
+- Lower time suggests better usability
+- Number of time-outs and number of incorrect results can also be measured
+- distinctiveness of an image (how similar it is to all other images) can affect retieval performce.
+
+#### Category search
+- give user an example image or keyword and ask user to locate N semantically relevant images from the system.
+- similar to target search but does not have to be exhaustive
+	- More than N matches in DB
+- Relatively simple to conduct
+- Time taken to select images, time-outs and the error rate can be measured (errors calculated by consulting pre-defined ground-truth)
+- Can also investigate how user arrived at the N images.
+	- images vs time
+
+#### Journalistic task
+- commmon use of image retrieval systems for journalistic purposes are "searches to illustrate a document"
+- User given an article of text and asked to illustrate
+- In essence, a variant of a category search.
+- Time taken and relevance of retievd images can be measured
+
+#### Annotation task
+- Task is for user to annotate a dataset.
+- image browsing systems useful to aid annotation
+- rivh set of measurements can be extracted from the task including number of interactions, error rate and time taken.
+- Can be measure in principle for any system
+	- if annotation function has been added
+- In essence, very similar to category search.
+
+#### User opinion
+- Users are asked to complete a questionnaire in order to gauge their opinion on the system and/or aspects of the user interface
+- Should be implemented in conjunction with another more objective task
+- Questionnaires can be analysed statistically
+- Can be useful in gaining insights into usefulness of different aspects of the system, which may lead to improved appraches.
+
+
+### Summary
+- Image browsers provide an alternative to retrieval-based approaches
+- visualisation/browsing by visual similarity
+- Mapping-based - Clustering-based - graph-based.
+- PCA (not only) for visualisation
+- Clustering (not only) for visualisation
+- Browsing: horizontal - vertical
+- A sample image browsing application: hue sphere image browser.
+
 
 ----------------------
 
