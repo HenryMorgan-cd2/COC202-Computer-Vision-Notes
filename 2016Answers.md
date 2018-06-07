@@ -19,7 +19,7 @@ Used to reduce random noise, such as salt and pepper noise, and blurr an image, 
 
 8. 
 <pre>
-   0 1 2 3
+     0 1 2 3
    0 1 1 0 1
    1 0 0 0 0
    2 1 0 1 0
