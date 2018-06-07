@@ -88,14 +88,14 @@
 		* [R-trees](#r-trees)
 			* [Retrieval](#retrieval)
 	* [Topic 5 - Image database visualization and browsing](#topic-5-image-database-visualization-and-browsing)
-		* [Image databsae browsing](#image-databsae-browsing)
+		* [Image database browsing](#image-database-browsing)
 		* [Mapping based visualisation](#mapping-based-visualisation)
 			* [PCA (Principal component analysis)](#pca-principal-component-analysis)
 				* [<review-of-basic-stuff&gt;](#review-of-basic-stuffgt)
 				* [Procedure](#procedure)
 				* [Usage](#usage)
 				* [For Feature Reduction](#for-feature-reduction)
-				* [For (face) recognition](#for-face-recognition)
+				* [For (facial) recognition](#for-facial-recognition)
 				* [For image database visualisation](#for-image-database-visualisation)
 			* [MDS (Multi-dimensional scaling)](#mds-multi-dimensional-scaling)
 				* [For image database visualisation](#for-image-database-visualisation-1)
@@ -123,7 +123,7 @@
 		* [Summary](#summary)
 	* [Topic 6 - Colour consistancy and colour invariance](#topic-6-colour-consistancy-and-colour-invariance)
 		* [Adding Colour](#adding-colour)
-		* [Colour based image retrieval(Uses QBE)](#colour-based-image-retrievaluses-qbe)
+		* [Colour based image retrieval (Uses QBE)](#colour-based-image-retrieval-uses-qbe)
 			* [Advantages of colour indexing](#advantages-of-colour-indexing)
 		* [Colour image formation](#colour-image-formation)
 			* [Chromaticity space](#chromaticity-space)
@@ -1693,7 +1693,122 @@ Assumes that the brightest patch in the scene is a white patch.
 ##### Dichromatic reflectance
 ![Dichromatic reflectance diagram](images/dichromatic-reflectance.png)
 
+> TODO: need to add ntoes on slides 27-32
 
+#### Normalisation
+- Normalisations maintain image structure
+- Features that do not change with change of light
+- Scalars α,β and γ cancel
+- Normalisations have been shown to work well for image retrieval under varying viewing conditions
+	+ better than colour constancy algorithms
+
+- From many normalisation methods we can produce an actual output image.
+- output images of the same catured object should look similar.
+![normalisation-output-example](images/normalisation-output-example.png)
+- Output images can be used in further analysis. e.g. texture analysis
+
+##### Greyworld normalisation
+Normalising by mean gives illuminant invariant descriptors
+![greyworld-normalisation-equations](images/greyworld-normalisation-equations.png)
+
+##### MaxRGB normalisation
+Normalising by the brightest colour (the max RGB response) gives the illuminant invariant descriptors.
+![maxrgb-normalisation-equations](images/maxrgb-normalisation-equations.png)
+
+##### Colour constant colour indexing
+Ratios of colours are constant across illumination change.
+Calculating at each pixel colour ratios to its surround gives illumination invariant descriptors.
+![ratios-normalisation-equations](ratios-normalisation-equations.png)
+
+##### Comprehensive normalisation
+Chromaticities are invariant to the geometry.
+Similarly we can find descriptos that are invariant to illumination colour:
+– R/ΣR
+– G/ΣG
+– B/ΣB (Greyworld)
+By iterating and alternatively performing the two we get invariance both illumination and geometry
+
+#### Linear vs non-linear devices
+Image formation equation (physics) is linear.
+But in reality images are in general not linear.
+Linear images are hard to obtain
+Most linear images are not desirable
+	+ Monitor gamma
+	+ contrast enhancement - we want to make images look good
+Models of illumination change hold only for linear devices
+Colour invariants rely on linear model
+
+![object-14-viewing-conditions](images/object-14-viewing-conditions.png)
+![object-14-viewing-conditions-normalised](images/object-14-viewing-conditions-normalised.png)
+
+#### Ranking preserving invariants
+- If object 1 under light A is more red than object 2 then it will also appear more red under light B.
+- This relationship will also hold for images that underwent a non-linear monotonic transform(such as a contrast change)
+- The ranking between RGBs is preserved
+- Invariants that preserve the ranking of RGB values should prove useful for invariant image retrieval
+
+### Histogram Equalisation
+- Typically used as a contrast enhancing technique
+- It modifies the histogram so that is is approxiamtely uniform
+- Histogram equalisation is a simple yet powerful colour invariant
+- equalisation preserves the ranking
+- apply histogram equalisation to eah channel seperately
+![histogram-equalisation](images/histogram-equalisation.png)
+![object-14-viewing-conditions-histogram-equalisation](images/object-14-viewing-conditions-histogram-equalisation.png)
+
+#### Gamma and brightness affect colours
+![gamma-brightness-colour-change](images/gamma-brightness-colour-change.png)
+
+#### The problem with linear images
+![linear-images-problems](images/linear-images-problems.png)
+
+![non-linear-monitors](images/non-linear-monitors.png)
+
+#### Correcting images for display
+If the monitor applies a power of gamma, the reciprocal of gamma must be applied to linearise the RGBs:
+![correcting-images-for-displays](images/correcting-images-for-displays.png)
+
+#### Displaying correctd images
+![displaying-corrected-image](images/displaying-corrected-image.png)
+
+#### Enhancing Images
+![enhancing-images](images/enhancing-images.png)
+![enhancing-images-2](images/enhancing-images-2.png)
+
+#### Brightness
+Brighness changes the overall magnitude of each RGB. It applies a linear compression/expansion to all pixels equally:
+![brightness-equations](images/brightness-equations.png)
+
+### Summary of Brightness and Gamma
+1) Altering brightness and gamma changes the colour of images (colour is not an absolute cue).
+2) Colour has 3 degrees of freedom. One should be independent of brightness/gamma
+3) We might ask what stays the same as we change the brightness and gamma? (Answer: the hue?)
+4) We might expect if we cancel brightness and gamma that we arrive at a huw correlate.
+
+### Hue in HSV, IHS, HLS
+![hue-equations](images/hue-equations.png)
+
+### An invariant to brightness and gamma
+![brightness-gamma-invariant](images/brightness-gamma-invariant.png)
+![brightness-gamma-invariant-2](images/brightness-gamma-invariant-2.png)
+![brightness-gamma-invariant-3](images/brightness-gamma-invariant-3.png)
+![brightness-gamma-invariant-3](images/brightness-gamma-invariant-4.png)
+
+### Summary
+- Image colours are affected by a variety of confounding factors
+	+ image geometry, illumination, devices
+- Images are further affected by manipulation
+	+ brightness and gamma
+- All these changes will cause problems for colour based algorithms
+- We can devise algorithms to "get rid" of these effects.
+	+ Colour constancy: estimate illuminant colour(and correct image)
+		+ statistical: greyworld, maxrgb
+		+ physics-based: dichromatic colour constancy
+	+ Colour invariants: not affected by changes
+		+ Greyworld, MaxRGB
+		+ Colour rations, comprehensive normalisation
+		+ Histogram equalisation
+		+ Gamma/brightness invariant hue
 ----------------------
 
 ## Topic 7 - Texture
