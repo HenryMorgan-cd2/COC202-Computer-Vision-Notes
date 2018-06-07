@@ -292,6 +292,8 @@ Noise can be reduced by averaging many noisy images together
 Enhanced image = image after injection with contrast medium - image before injection
 ```
 
+![Angiography](images/angiography.png)
+
 ----------------------
 
 ## Topic 2 - Spatial Domain Image Processing
@@ -426,15 +428,11 @@ High-contrast image characterized by:
 
 Main idea of histogram equalization is to redistribute the grey-level values uniformly.
 
-Number of pixels in image: n
-
-Number of pixels in image with intensity k: n<sub>k</sub>
-
-Probability of occurrence of gay level k in the image is p(k) = n<sub>k</sub> / n
-
-Cumulative histogram/cumulative distribution function (CDF): CDF(k) = ∑ p(k) = ∑ n<sub>j</sub> / n
-
-Transformation function: T(k) = (L - 1)CDF(k) = (L - 1) ∑ P<sub>r</sub>(r<sub>j</sub>) = (L - 1) ∑ n<sub>j</sub> / n
+- Number of pixels in image: n
+- Number of pixels in image with intensity k: n<sub>k</sub>
+- Probability of occurrence of gay level k in the image is p(k) = n<sub>k</sub> / n
+- Cumulative histogram/cumulative distribution function (CDF): CDF(k) = ∑ p(k) = ∑ n<sub>j</sub> / n
+- Transformation function: T(k) = (L - 1)CDF(k) = (L - 1) ∑ P<sub>r</sub>(r<sub>j</sub>) = (L - 1) ∑ n<sub>j</sub> / n
 
 E.g
 ```
@@ -485,16 +483,12 @@ Histogram equalization is a special case of histogram specification/histogram ma
 **Histogram matching:** transform a given histogram/image so the resultant histogram matches (as close as possible) a target histogram/ histogram of a given image
 
 - Histogram equalisation: `target histogram = flat histogram`
-
-Calculate CDF<sub>1</sub> of image 1 (source image)
-
-Calculate CDF<sub>2</sub> of image 2 (target image)
-
-For each greylevel G<sub>1</sub> in image 1: Find greylevel G<sub>2</sub> so that:
-
-CDF<sub>1</sub> (G<sub>1</sub>) = CDF<sub>2</sub> (G<sub>2</sub>) (look for closest match)
-
-Identified greylevel then gives the mapping: G<sub>1</sub> -> G<sub>2</sub>
+<br/>
+- Calculate CDF<sub>1</sub> of image 1 (source image)
+- Calculate CDF<sub>2</sub> of image 2 (target image)
+- For each greylevel G<sub>1</sub> in image 1: Find greylevel G<sub>2</sub> so that:
+- CDF<sub>1</sub> (G<sub>1</sub>) = CDF<sub>2</sub> (G<sub>2</sub>) (look for closest match)
+- Identified greylevel then gives the mapping: G<sub>1</sub> -> G<sub>2</sub>
 
 ### Spatial Filtering
 
@@ -561,14 +555,16 @@ Same for image - along one (x) dimension:
 
 ∂<sup>2</sup>f/∂y<sup>2</sup> = f(y + 1) + f(y - 1) - 2f(y)
 
-- First-order derivative describes gradual transitions
-- Second-order derivative describes sharp transitions (edges)
-- Second-order derivatives enhances fine detail more that first-order
-- Second-order zero-crossings indicate edges
+- First-order derivative
+	- describes gradual transitions
+- Second-order
+	- describes sharp transitions (edges)
+	- enhances fine detail more that first-order
+	- zero-crossings indicate edges
 
 ### Sharpening Filter - Laplacian
 
-Laplacian Filter derivation - Week 2 - Slide 60
+> Slide 60 for Laplacian Filter derivation
 
 <code>∇<sup>2</sup>f = f(x + 1, y) +f(x - 1, y) + f(x, y + 1) + f(x, y - 1) - 4f(x, y)</code>
 
@@ -586,7 +582,7 @@ Taking into account diagonal neighbours:
 1  -8   1
 1   1   1
 ```
-- Filtered image highlights intensity discontinuities; "flat" for constant or slowly varying intensity
+- The filtered image shows where the intensity changes; "flat" for constant or slowly varying intensity
 - Can be used to identify edges
 
 **Laplacian for Sharpening:**
@@ -608,28 +604,30 @@ Idea: emphasise pixels identified by Laplacian (edges etc)
 Idea: Sharpen an image by obtaining image details through subtracting a smoothed (unsharp) version of the original image from the original
 
 Steps:
-- Blur original (e.g Gaussian filter)
-- Subtract blurred from original to get mask
-- Add mask to original
+1. Blur original (e.g Gaussian filter)
+2. Subtract blurred from original to get mask
+3. Add mask to original
 
 ### Sobel Filter
-Z<sub>1</sub>   Z<sub>1</sub>   Z<sub>1</sub>
+<pre><code>
+Z<sub>1</sub>  Z<sub>2</sub>  Z<sub>3</sub>
+Z<sub>4</sub>  Z<sub>5</sub>  Z<sub>6</sub>
+Z<sub>7</sub>  Z<sub>8</sub>  Z<sub>9</sub>
+</code></pre>
 
-Z<sub>4</sub>   Z<sub>5</sub>   Z<sub>6</sub>
+<code>M(x, y) ≈ | (z<sub>7</sub> + 2 z<sub>8</sub> + z<sub>9</sub>) - (z<sub>1</sub> + 2 z<sub>2</sub> + z<sub>3</sub>) | + | (z<sub>3</sub> + 2 z<sub>6</sub> + z<sub>9</sub>) - (z<sub>1</sub> + 2 z<sub>4</sub> + z<sub>7</sub>) |</code>
 
-Z<sub>7</sub>   Z<sub>8</sub>   Z<sub>9</sub>
+```
+- Useful for detecting edges
 
-M(x, y) ≈ | (z<sub>7</sub> + 2 z<sub>8</sub> + z<sub>9</sub>) - (z<sub>1</sub> + 2 z<sub>2</sub> + z<sub>3</sub>) | + | (z<sub>3</sub> + 2 z<sub>6</sub> + z<sub>9</sub>) - (z<sub>1</sub> + 2 z<sub>4</sub> + z<sub>7</sub>) |
+-1  -2  -1
+ 0   0   0  G_y - Horizontal edges
+ 1   2   1
 
-    - Useful for detecting edges
-
-    -1  -2  -1
-     0   0   0  G_y - Horizontal edges
-     1   2   1
-
-    -1   0   1
-    -2   0   2  G_x - Vertical edges
-    -1   0   1
+-1   0   1
+-2   0   2  G_x - Vertical edges
+-1   0   1
+```
 
 ----------------------
 
@@ -686,7 +684,7 @@ New image value defined by
 
 ### Hit
 
-- Any **on-pixels* in the SE covers an on-pixel in the image
+- Any **on-pixels** in the SE covers an on-pixel in the image
 
 All morphological processing operations can be modelled based on hits and fits
 
@@ -847,7 +845,7 @@ Hit-or-miss structuring elements:
         0   1   1
         0   0   -
 
-If foreground AND background mixels match image region covered by SE:
+If foreground AND background pixels match image region covered by SE:
 
     - set pixel at origin to 1 (foreground)
     - otherwise set pixel to 0 (background)
@@ -895,7 +893,7 @@ E.g.
 
 ### Traditionally
 
-Traditionally images were retrieved using **text annotations**. This is were each image is tagged with a set of *keywords* or *textual description*. Then a standard text search can be used to obtain images.
+Traditionally images were retrieved using **text annotations**. This is where each image is tagged with a set of *keywords* or *textual description*. Then a standard text search can be used to obtain images.
 
 **+** Text search is easy
 **+** Use SQL databases for query interface
@@ -976,7 +974,7 @@ d(i1, i2) = (h1 - h2) * A * (h1 - h2)^T
 - `A` contains inter-bin distances
 - without A it becomes (squared) euclidean distance
 
-*This is all that is said on this topic*
+> This is all that is said on this topic
 
 ##### Color Moments
 - Moments as a compact color descriptors
@@ -986,7 +984,7 @@ d(i1, i2) = (h1 - h2) * A * (h1 - h2)^T
 ![Color Moments Formula 2](images/color-moments-2.png)
 - Moments can be used as lower bound for histograms.
 
-//TODO: some research on color moments. Lecture Capture: **1st march 1:35:00**
+> TODO: some research on color moments. Lecture Capture: **1st march 1:35:00**
 
 **Problem:**
 ```javascript
@@ -1155,20 +1153,20 @@ Shot cut detection is nothing more then similarity detection between frames.
 
 #### Key frame selection
 
-Once a video is split into shots - each shot having one or more representative frames (key frames)
+Once a video is split into shots - each shot is assigned one or more representative frames (key frames)
 
 Methods:
 
 - **first frame**
 - **middle frame**
 - **fixed n** - select n-th frame
-- **centroid frame** - select frame whose distance to all other frames in shot is minimized.
+- **centroid frame** - select frame whose *distance* to all other frames in shot is minimized.
 
 These key frames can be used during retrieval.
 
 ### Semantic Gap
 
-Computers cant identify whats in the image. They can identify low-level features.
+Computers can't identify whats in the image. They can identify low-level features.
 Our semantic understanding of the image cannot be accurately modelled using low-level features.
 This is the semantic gap.
 
@@ -1237,7 +1235,7 @@ The search is based on the overlap of bounding boxes and the query region.
 
 [PDF](http://learn.lboro.ac.uk/pluginfile.php/481561/mod_resource/content/7/COC202_1718_lect_05.pdf)
 
-### Image databsae browsing
+### Image database browsing
 
 - Query by example (QBE)
 	- Query by image content (QBIC)
@@ -1247,7 +1245,7 @@ The search is based on the overlap of bounding boxes and the query region.
 - query by keyword
 	- requires annotation, either manual or automatic
 
-Problem by X as problems:
+Query by X has problems:
 - needs a query
 	- image (why search if you have one?)
 	- sketch (try drawing "wind")
@@ -1271,7 +1269,7 @@ Solution: Browsable image collections
 > sorted by date :O
 > This is hard to browse
 
-There are 2 mean tasks:
+There are 2 main tasks:
 - Visualisation
 	- image arrangement
 	- where to place images on screen
@@ -1330,7 +1328,7 @@ There are 2 mean tasks:
 		-	in matlab it is done with the `eig()` method
 > **orthonormal** *adjective* - both orthogonal and normalized.
 
-**<review-of-basic-stuff /&gt;**
+**</review-of-basic-stuff&gt;**
 
 ##### Procedure
 1. calculate covariance matrix of data
@@ -1345,9 +1343,9 @@ There are 2 mean tasks:
 
 ##### Usage
 - Data projected into new space spanned by PCs.
-	- PCs are weighted sums of original data axes.
+	- PCs are weighted sums of original data axis.
 - Projection itself is lossless
-	- Data has same dumensionality
+	- Data has same dimensionality
 	- can be fully recovered through inverse transform
 - we can also project into a lower-dimensional space
 	-	space spanned by k PCs with largest eigenvalues
@@ -1368,7 +1366,7 @@ There are 2 mean tasks:
 <br />
 - Often gives comparable or possibly even better results than original features.
 
-##### For (face) recognition
+##### For (facial) recognition
 - Normalised face images treated as data vectors
 - run PCA on that data
 	-	pick k PCs = eigenfaces
@@ -1521,11 +1519,11 @@ As a result, images belonging to the cluster but not shown previously, are prese
 #### Graph-based browsing
 Operations such as panning and zooming can in general be applied to graph-based visualisations.
 
-In addition navidation can be performed following the edges that connect images.
+In addition navigation can be performed following the edges that connect images.
 
 #### Time-based browsing
 
-Time stamp infomationattached to images can be used arrange and visualise image collections.
+Time stamp infomation attached to images can be used to arrange and visualise image collections.
 Clearly if a collection is visualised based on temporal concepts, browsing should also be possible based on time.
 Often clustering-based, using representative images for clusters that correspond to certain time periods.
 
@@ -1615,7 +1613,7 @@ Visualisation space not optimally used.
 
 Our retinas percieve colour using cones. We have red, green and blue cones.
 
-### Colour based image retrieval(Uses QBE)
+### Colour based image retrieval (Uses QBE)
 1. A colour histogram can be created for each image in a database, where the colour histogram is equal to the index that each image is saved under.
 2. A query image is input and a colour histogram is created for that image. The histogram intersection between the query image and all images in the database are compared.
 3. Rank images bu intersection score
@@ -1748,8 +1746,8 @@ Let <code>P(Z<sub>i</sub>), i=0,1,...,L-1</code>, be the histogram of an image z
 Measure of contrast
 ![Second order moment formula](images/secondordermomentformula.png)
 
-- Smoothness
-	- 0 for areas of constant intensity
+**Smoothness**
+0 for areas of constant intensity
 ![smoothness formula](images/smoothnessformula.png)
 
 **Third order moment**
