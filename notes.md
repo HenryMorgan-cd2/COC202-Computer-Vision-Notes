@@ -798,7 +798,7 @@ Closing:
 
 Based on erosion, the boundary can be extracted by:
 
-- β (A) = A - (A ⊕ B)
+- β (A) = A - (A ⊖ B)
 
 E.g.
 
