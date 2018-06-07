@@ -29,6 +29,8 @@
 		* [Contrast/Histogram Stretching](#contrasthistogram-stretching)
 			* [Dynamic Range](#dynamic-range)
 			* [Thresholding](#thresholding)
+			* [General Contrast Stretching](#general-contrast-stretching)
+			* [Highlighting intensity range](#highlighting-intensity-range)
 		* [Histogram Equalization](#histogram-equalization)
 		* [Global vs. Local Processing](#global-vs-local-processing)
 		* [Histogram Matching](#histogram-matching)
@@ -2022,6 +2024,8 @@ This stream is compressed with the **DEFLATE** algorithm.
 
 ### JPEG compression
 > Its an ISO standard and pretty popular amongst the humans.
+
+> Computerphile has a good [video](https://www.youtube.com/watch?v=Q2aEzeMDHMA) of this process
 
 Compression in the frequency domain
 - Discrete cosine transform (DCT)
