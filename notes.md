@@ -26,7 +26,6 @@
 		* [Linear Images](#linear-images)
 			* [Gamma (power law) transformation](#gamma-power-law-transformation)
 		* [Image Histograms](#image-histograms)
-			* [Linear interpolation](#linear-interpolation)
 		* [Contrast/Histogram Stretching](#contrasthistogram-stretching)
 			* [Dynamic Range](#dynamic-range)
 			* [Thresholding](#thresholding)
@@ -376,35 +375,43 @@ Histograms clustered at the high end correspond to **bright** images
 Histograms with a small spread typically correspond to **low contrast** images (i.e mostly dark, mostly bright, or mostly grey)
 Histograms with a widespread typically correspond to **high contrast** images
 
-Piecewise linear transform based on pair of pixel mappings (r<sub>1</sub>, s<sub>1</sub>) and (r,<sub>2</sub>, s<sub>2</sub>)
-
-#### Linear interpolation
-<pre><code>
-(0, 0) - (r<sub>1</sub>, s<sub>1</sub>)
-(r<sub>1</sub>, s<sub>1</sub>) - (r,<sub>2</sub>, s<sub>2</sub>)
-(r,<sub>2</sub>, s<sub>2</sub>) - (max, max)
-</code></pre>
 
 ### Contrast/Histogram Stretching
 
+Piecewise linear transform based on pair of pixel mappings (r<sub>1</sub>, s<sub>1</sub>) and (r,<sub>2</sub>, s<sub>2</sub>)
+
+> Piecewise function: a function consisting of multiple subfunctions.
+> Think **batman** graph.
+
+- Linear interpolation
+<pre><code>
+(0, 0) - (r<sub>1</sub>, s<sub>1</sub>)
+(r<sub>1</sub>, s<sub>1</sub>) - (r,<sub>2</sub>, s<sub>2</sub>)
+(r<sub>2</sub>, s<sub>2</sub>) - (max, max)
+</code></pre>
+
 #### Dynamic Range
 
-Input: limited dynamic range  -  <code>(r<sub>1</sub> ; r<sub>2</sub>) r<sub>1</sub> >=0, r<sub>2</sub> <= L</code>
+- **Input**: limited dynamic range  -  <code>(r<sub>1</sub> ; r<sub>2</sub>) r<sub>1</sub> >=0, r<sub>2</sub> <= L</code>
 
-Output: full dynamic range  -  [0;L]
+- **Output**: full dynamic range  -  [0;L]
 
 #### Thresholding
 
-Special case
+Special case of histogram stretching.
 
-> TODO: Whats it a special case of?
-
-Output: binary image
+**Output**: binary image
 
 - pixels below threshold -> 0
 - pixels above threshold -> 1
 
-Images on **general contrast stretching** and **Highlighting intensity range (intensity/greylevel slicing)** but no formal notes
+
+#### General Contrast Stretching
+![General contrast stretching graph](images/generalcontraststretching.png)
+
+#### Highlighting intensity range
+
+![Highlighting intensity range graph](images/highlightingintensityrangegraph.png)
 
 ### Histogram Equalization
 
