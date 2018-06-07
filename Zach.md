@@ -354,77 +354,19 @@ Z<sub>7</sub>  Z<sub>8</sub>  Z<sub>9</sub>
 
 ### Morphological Region Filling/Hole Filling
 
-Given a boundry and a pixel inside the boundry, region/hole filling attempts to fill that boundry with object pixels (i.e with 1's)
-
-Repeated dilation, followed by intersection with (complement of) boundry:
-
-X<sub>k</sub> = (X<sub>k-1</sub> ⊕ B) ∩ A<sup>c</sup>     k = 1,2,3...
-
-- A: boundry
-- A<sup>c</sup>: comnplement of boundry
-- X<sub>0</sub>: starting point inside boundry
-
-Repeat until there is no change
-
 E.g.
 
 ![region filling](images/filling.png)
 
 ### Morphological Hit-or-Miss Transform
 
-Used to identify particular patterns of foreground or background pixels in binary images
-
-- Very simple object recognition
-
-Hit-or-miss structuring elements:
-
-    - 0's (background) and 1's (foreground)
-    - "don't care" elements
-    - e.g. SE for corner detection:
-
-        -   1   -
-        0   1   1
-        0   0   -
-
-If foreground AND background pixels match image region covered by SE:
-
-    - set pixel at origin to 1 (foreground)
-    - otherwise set pixel to 0 (background)
-
-Outputs of different hit-or-miss transforms can be combined
-
 ### Morphological Corner Detection
-
-Based on hit-and-miss transform
-
-Corner SELs:
-**SEL:** Structuring ELements
-
-    -   1   -       -   1   -       -   0   0       0   0   -
-    0   1   1       1   1   0       1   1   0       0   1   1
-    0   0   -       -   0   0       -   1   -       -   1   -
-
-    - one for each type of corner
-
-OR the outputs
 
 E.g.
 
 ![corner detection](images/corner.png)
 
 ### Morphological Thinning
-
-Based on hit-or-miss transform and thinning SE's
-
-Repeat until no change
-
-- Repeat with each thinning SE
-    - Calculate hit-or-miss transform of the current image with SE
-    - Subtract the result from the current image to yield new current image
-
-E.g.
-
-![thinning image](images/thinning.png)
 
 ----------------------
 
