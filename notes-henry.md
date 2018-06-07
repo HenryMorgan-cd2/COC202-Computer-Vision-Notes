@@ -329,103 +329,18 @@ Z<sub>7</sub>  Z<sub>8</sub>  Z<sub>9</sub>
 ## Topic 3 - Morphological Image Processing
 [Week 3 - PDF](http://learn.lboro.ac.uk/mod/resource/view.php?id=303244)
 
-Morphology: branch of biology that deals with the form and structure of animals and plants
-
-Mathematical morphology of images - form, structure, image regions + characteristics/relations
-
-Morphological image processing:
-
-- used for pre/post-processing (cleaning/smoothing)
-- for simple image analysis (corner/pattern detection, boundary extraction, thinning, etc)
-- operates primarily on binary images
-
-### Fit & HIT
 FIT = ALL
 HIT = ANY
 
 ### Morphological Boundry Extraction
 
-Based on erosion, the boundary can be extracted by:
-
-- β (A) = A - (A ⊖ B)
-
-E.g.
-
-![boundry detection](images/boundry.png)
-
 ### Morphological Region Filling/Hole Filling
-
-Given a boundry and a pixel inside the boundry, region/hole filling attempts to fill that boundry with object pixels (i.e with 1's)
-
-Repeated dilation, followed by intersection with (complement of) boundry:
-
-X<sub>k</sub> = (X<sub>k-1</sub> ⊕ B) ∩ A<sup>c</sup>     k = 1,2,3...
-
-- A: boundry
-- A<sup>c</sup>: comnplement of boundry
-- X<sub>0</sub>: starting point inside boundry
-
-Repeat until there is no change
-
-E.g.
-
-![region filling](images/filling.png)
 
 ### Morphological Hit-or-Miss Transform
 
-Used to identify particular patterns of foreground or background pixels in binary images
-
-- Very simple object recognition
-
-Hit-or-miss structuring elements:
-
-    - 0's (background) and 1's (foreground)
-    - "don't care" elements
-    - e.g. SE for corner detection:
-
-        -   1   -
-        0   1   1
-        0   0   -
-
-If foreground AND background pixels match image region covered by SE:
-
-    - set pixel at origin to 1 (foreground)
-    - otherwise set pixel to 0 (background)
-
-Outputs of different hit-or-miss transforms can be combined
-
 ### Morphological Corner Detection
 
-Based on hit-and-miss transform
-
-Corner SELs:
-**SEL:** Structuring ELements
-
-    -   1   -       -   1   -       -   0   0       0   0   -
-    0   1   1       1   1   0       1   1   0       0   1   1
-    0   0   -       -   0   0       -   1   -       -   1   -
-
-    - one for each type of corner
-
-OR the outputs
-
-E.g.
-
-![corner detection](images/corner.png)
-
 ### Morphological Thinning
-
-Based on hit-or-miss transform and thinning SE's
-
-Repeat until no change
-
-- Repeat with each thinning SE
-    - Calculate hit-or-miss transform of the current image with SE
-    - Subtract the result from the current image to yield new current image
-
-E.g.
-
-![thinning image](images/thinning.png)
 
 ----------------------
 
@@ -565,22 +480,6 @@ Auto-correlogram: probability of the **same color** a set distance away
   - Periodicity
   - Randomness
 
-##### Local binary patterns
-Discribes direct pixel neighbourhoods.
-
-1. Take each pixel, and compare it to its 8-neighbourhood
-2. Threshold the neighbouring pixels with the main pixel in the middle
-3. retrieve sequence of 8 bits (256 possible values).
-4. use this sequence as index to histogram (256 buckets)
-5. Compare histograms
-```javascript
-  6 5 2                     1 0 0
-  7 6 1   ===threshold===>  1   0
-  8 8 7                     1 1 1
-                           <- ^ Start
-
-  sequence = 11110001 = 241
-```
 
 #### Shape
 Divide image into 4x4 blocks.
@@ -625,25 +524,12 @@ Compare histogram intersections.
 - Describe asymmetries, shape features, etc
 
 #### Invariant Moments
-- moments change with translation, rotation, scale and contrast
-- useful image features should be independent of these factors
 
 ##### Central Moments
-- Invariant to **translation**
-> It moves the subject to the center
-
-![Image center moment](images/image-center-moments.png)
-
 ##### Normalized central moments
-- Invariant to **translation** and **scale**
-![image normalized center momement](images/image-norm-center-moment.png)
-
 ##### (Hu's) moments invariants
 - Algebraic combination of central moment
 - Invariant to translation, scale and rotation
-
-> Its a giant list of formula
-> I cant imagine we will need to know it
 
 ##### (Maitra's) moment invariants
 - Combination of Hu moments
@@ -669,12 +555,6 @@ We need to normalize the features to make them equal (and thus comparable).
 
 or use appropriate distance measure such as Mahalanobis distance.
 
-> *Taken from somewhere on the internet:*
-> The Mahalanobis distance has the following properties:
-> - It accounts for the fact that the variances in each direction are different.
-> - It accounts for the covariance between variables.
-> - It reduces to the familiar Euclidean distance for uncorrelated variables with unit variance.
-
 ### Video Retrieval
 Indexing every frame of a video is not feasible.
 Taking every n-th frame is also ineffective.
@@ -684,40 +564,6 @@ Videos need to be segmented based on content i.e based on shots.
 - Soft cut = animated transition such as fade, disolve, wipe
 
 #### Shot cut detection
-Consecutive frames tend to be very similar and thus contains a lot of redundancy.
-Cuts mark a big difference.
-Shot cut detection is nothing more then similarity detection between frames.
-
-##### Color histograms
-1. calculate color histogram for every frame
-2. perform histogram intersection between neighbouring frames.
-3. an intersection below a set threshold indicates a possible cut.
-
-#### Key frame selection
-
-Once a video is split into shots - each shot is assigned one or more representative frames (key frames)
-
-Methods:
-
-- **first frame**
-- **middle frame**
-- **fixed n** - select n-th frame
-- **centroid frame** - select frame whose *distance* to all other frames in shot is minimized.
-
-These key frames can be used during retrieval.
-
-### Semantic Gap
-
-Computers can't identify whats in the image. They can identify low-level features.
-Our semantic understanding of the image cannot be accurately modelled using low-level features.
-This is the semantic gap.
-
-approaches to bridge gap:
-
-- Relevance feedback.
-- Image classification and annotation
-- image database navigation/browsing
-
 
 #### Relevance Feedback
 
@@ -735,42 +581,6 @@ During feedback, weights associated with positive features are increased and wei
 - Segment image to extract regions
 - regions associated with words
 - statistical modelling is needed to derive probability models for individual regions
-
-### R-trees
-
-There is a lot of data to store for CBIR, an exhaustive search will take too long.
-Features are usually high-dimensional
-
-R-Trees offer a data structure for efficient retrieval of high-dimensional data.
-Originally used to index spatial data.
-Data is stored in a tree such that during querying only part of the complete structure needs to be examined.
-
-The space is divided in N-dimensional cubes (squares for 2d)
-
-Data is stored on the Leaves
-The nodes hold the dimensions of the bounding box and pointers to child nodes
-If the number of children rise above a set limit then the bounding box is split
-
-R-Trres have 2 parameters:
-- M: **max** number of children
-- m: **min** number of children
-
-Adding a leaf node
-1. find the region it fits into
-2. if there are fewer then M children then add it to the region (adjust bounds if needed)
-3. if there are more then M then split the region in twine.
-	- Each new sub region must contain at least `m` children.
-	- Check if the split affects and nodes further up the tree and create/split regions as needed
-
-#### Retrieval
-We want to retrieve all samples within a given region.
-The search is based on the overlap of bounding boxes and the query region.
-
-1. At the root of the tree, if the bounding box intercepts the query then descend into the node.
-2. If the children are intermediate nodes, repeat step *1* for the node.
-1. If the children are leaf nodes, then check each one to see which are in the query region.
-
-----------------------
 
 
 ## Topic 5 - Image database visualization and browsing
@@ -840,13 +650,7 @@ There are 2 main tasks:
 	- visualisation
 
 ##### <review-of-basic-stuff&gt;
-> Slides 16-19 for formulae
 
-- Mean
-- Standard Deviation
-	-	describes spread
-- Variance
-	- square of standard deviation
 - **Covariance**
 	- operates on two vars `cov(X, Y)`
 	- indication of how one variable is related to another
@@ -968,21 +772,13 @@ Similar images will get projected to similar locations
 	- Using image creation date
 
 #### K-Means
-- equal grouping of similar samples into groups (clusters)
-- most popular algo is k-means
-
-1. Initialize k cluster centers (randomly)
-2. map each sample to its closest cluster center
-3. recalculate each cluster center as the center of mass of all its samples
-4. go to step 2 until convergence (clusters don't change)
-
 ##### For image segmentation
 - divide an image up into different regions corresponding to objects.
 	-	its hard
 	- many techniques
 - K-means clustering can be used
 	- select k (not easy)
-	- samples = pixels
+	- **samples = pixels**
 	- data for each sample = intensity (greyscale) or RGB (color)
 	- run k-means using that data
 	- "Divide" image according to clusters
@@ -1076,7 +872,6 @@ Often clustering-based, using representative images for clusters that correspond
 **Hue sphere image browser**
 
 > Slides 54-65
-
 
 Attribute extraction:
 - extract median colour
@@ -1493,19 +1288,6 @@ Instead of the 8-neighborhood, a circular neighborhood at a set pixel distances 
 
 This results in some points not falling directly on a pixel. Here, we **interpolate**.
 
-##### Rotation Invariant LBP
-If the texture is rotated then the binary patterns produced will change.
-
-Rotation invariance can be obtained by grouping all possible rotations together.
-This can be done by considering the unique minimal value of binary patterns.
-- Perform all possible rotations (through bitshifts)
-- minumun of these gives the selected value
-
-![Rotation invariant lbp example](images/rotationinvariantlbp.png)
-
-There are 36 patterns for 8-neighborhoods.
-> Examples of this on 33 and 34
-
 ##### Uniform LBP
 Certain binary patterns are fundamental properties of texture
 - Sometimes frequency > 90%
@@ -1551,19 +1333,6 @@ In an MD-LBP a multi-dimensional histogram is built.
 ## Topic 8 - Image compression
 [PDF](http://learn.lboro.ac.uk/pluginfile.php/488397/mod_resource/content/8/COC202_1718_lect_08.pdf)
 
-*Reduce the amount of bits to store an image*
-
-> Lossy vs Lossless
-
-### Runlength coding
-For each element, specify the number of times the value is repeated
-
-```javascript
-Before: 212 211 211 215 214 214 214 214
-After:  1,212 2,211 1,215 4,214
-```
-
-Useful for sparse data with runs of identical values. E.g images with uniform areas.
 
 ### Differential coding
 We store the difference to the previous values.
@@ -1578,69 +1347,6 @@ Since values can be both positive and negative it actually double the number of 
 
 However, images typically change slowly and so most of the differences will be small.
 We can apply further compression.
-
-### Entropy coding - Huffman coding :D
-Huffman coding is the most popular form of entropy coding.
-
-Not all symbols occur with the same probability.
-- Assign binary codes to symbols.
-- Shorter codes are assign to more common symbols.
-	- and thus take less bits to store
-- longer codes are assigned to less frequent symbols
-
-Huffman coding results in a huffman table that maps bitstrings to symbols.
-
-Due to the need to store the conversion table, Huffman coding does not work on small data sets.
-
-JPEG uses a standard Huffman table and therefore does not need to be stored, transferred or calculated.
-```javascript
-Before: 212 211 211 215 214 214 214 214
-
-Before in binary: 11010100 11010011 11010011 11010111
-                  11010110 11010110 11010110 11010110
-
-After: 	11010101110000
-        214 -> 0
-        211 -> 10
-        212 -> 110
-        215 -> 111
-
-	64 bits to 14 bits!                   (+ the table ¯\_(ツ)_/¯)
-```
-decoding is the same as encoding but reversed... Figure it out...
-
-#### Creating the table
-
-1. Sort the symbols by frequency
-	- 214: 4
-	- 211: 2
-	- 212: 1
-	- 215: 1
-
-2. Take the least two common and combine them into a tree
-```javascript
-   /\
-  /  \
-212   215
-```
-
-Then sum there frequencies and add this new element into the list in the correct position (according to the summed frequencies).
-
-3. Repeat step 2 until all symbols are merged.
-
-```javascript
-     /\
-    /  \
-  214  /\
-      /  \
-    211  /\
-        /  \
-      212  215
-```
-4. Decending the tree leftwards is a 0 and rightwards is a 1.
-
-> Huffman coding is the **most** efficient way to store data losslessly.
-> Proven by the Huffman himself.
 
 ### PNG - predictive coding
 Extends the previously mentioned differential coding.
@@ -1679,90 +1385,6 @@ This stream is compressed with the **DEFLATE** algorithm.
 	- look for duplicate sets of bytes; instead of storing them again store a back-reference to the already coded ones.
 
 ### JPEG compression
-> Its an ISO standard and pretty popular amongst the humans.
-
-> Computerphile has a good [video](https://www.youtube.com/watch?v=Q2aEzeMDHMA) of this process
-
-Compression in the frequency domain
-- Discrete cosine transform (DCT)
-
-Steps:
-- colour space conversion
-- DCT
-- quantisation (lossy part)
-- entropy coding (runlength / differential / huffman)
-
-#### Color space
-Humans can see changes in brightness but not color.
-Instead of RGB its more practical to store luminance and chrominance.
-
-Enter YCbCr color space.
-- Y: intensity
-- Cb: yellow-blue
-- Cr: red-green
-
-Its a linear transform of RGB
-![RGB to YCbCr matrix transorm](images/ycrcbtorgb.png)
-
-Chrominance infomation can be reduced without significant visual loss.
-Downsample Cb and Cr by a factor of 2 along each axis.
-
-#### Frequency domain
-Instead of thinking spatially in terms of pixels, we instead think of the frequency and amplitude of intensity changes.
-
-The human visual system is very good at perceiving changes in low frequency information but not high frequency - therefore: crush the highs and let the lows will survive.
-
-#### DCT - Discrete Cosine Transform
-DCT converts absolute values into amplitudes of frequency bands.
-
-Images are split into 8x8 blocks and DCT is applied to each block.
-
-- A level shift is applied to transform the 0-255 range into -128-127
-- since images are 2d, 2d DCT is used.
-
-![DCT formula](images/dct.png)
--	G<sub>u,v</sub> is the DCT coefficient at (u,v)
--	g<sub>x,y</sub> is the pixel value at (x,y)
-
-DCT transform coefficients:
-![DCT transform coefficients](images/dcttransformcoefficients.png)
-
-Each cell represents the frequency the coefficient at that location represents
-- top-left: DC coefficient
-- others: AC coefficients
-
-##### Examples
-![DCT example of coefficients](images/dctexample1.png)
-![DCT example of coefficients](images/dctexample2.png)
-![DCT example of coefficients](images/dctexample3.png)
-
-#### Quantisation
-the process of constraining a large number to a small number by rounding
-
-<center><code>y = round(V/q)</code></center><br/>
-where: V is the original and q is the quantisation factor.
-
-Multiplying the result by q obtains a value close to the original.
-
-`round(53 / 10) * 10 ≈ 53`
-
-**This process is lossy**
-
-- JPEG has 2 quantisation tables.
-	- luminance
-	- chrominance
-- These tables define quantisation factors for each of the 8x8 DCT coefficients.
-	- Higher values for higher frequencies
-
-These quantisation factors are scaled by a quality factor (q factor) between 1-100. This gives the user control of **quality vs file size**.
-
-> Slide 32 contains an example of the tables. They are just large matricies of values. with the final quantised values one containing alot of 0s as the process are removed alot of data from the orginal .
-
-> Slide 33 contains examples of jpeg images at different quality levels.
-> Q=95 is pretty good
-> Q=5 is nauseating
-
-
 
 #### Entropy Compression
 - DC values are differentially coded (difference to previous DC value).
@@ -1794,17 +1416,6 @@ These quantisation factors are scaled by a quality factor (q factor) between 1-1
 5. Quantise DCT coefficients using the quantisation tables and the chosen quality factor
 6. Differental coding of DC data followed by Huffman coding
 7. Runlength coding of AC data followed by Huffman coding
-
-#### Decompression
-
-Decompression is just the reverse
-- Entropy data is read in and entropy decoded
-- coefficients are de-quantised
-- inverse DCT performed
-- unsampling and color space conversion
-
-![Jpeg steps in a flow chart](images/jpegflowchart.png)
-
 
 #### Compression vs Retieval
 - Images must be compressed due to limited disk space
