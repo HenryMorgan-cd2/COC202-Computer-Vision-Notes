@@ -17,12 +17,14 @@ Used to reduce random noise, such as salt and pepper noise, and blurr an image, 
 7. Function to create an equalized histogram of an image, useful for compairing images with different illumination etc
    7. Performs historgram equalization on an image `im`.
 
-8.   0 1 2 3
+8. 
+<pre>
+   0 1 2 3
    0 1 1 0 1
    1 0 0 0 0
    2 1 0 1 0
    3 1 0 0 0
-   
+ </pre> 
 9. ?
 
 10. Human visual system is good at seeing differences in low frequency inputs, not as good at high frequency therefore high frequency 
