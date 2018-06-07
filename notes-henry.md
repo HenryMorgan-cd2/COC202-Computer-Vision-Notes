@@ -1,176 +1,3 @@
-# Computer Vision
-
-
-
-<!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
-
-<!-- code_chunk_output -->
-
-* [Computer Vision](#computer-vision)
-	* [Topic 1 - Introduction and Fundamentals](#topic-1-introduction-and-fundamentals)
-		* [Images](#images)
-		* [Pixel Neighbourhood](#pixel-neighbourhood)
-		* [Adjacency](#adjacency)
-		* [Paths](#paths)
-		* [Regions](#regions)
-		* [Distances](#distances)
-				* [D4-distance (city-block/Manhattan or L1 norm)](#dsub4sub-distance-city-blockmanhattan-or-lsub1sub-norm)
-				* [D8-distance (chessboard or max norm)](#dsub8sub-distance-chessboard-or-max-norm)
-		* [Image Enhancement](#image-enhancement)
-			* [Digital subtraction angiography](#digital-subtraction-angiography)
-	* [Topic 2 - Spatial Domain Image Processing](#topic-2-spatial-domain-image-processing)
-		* [Spatial Domain Processing](#spatial-domain-processing)
-		* [Graylevel transforms (intensity transformation functions)](#graylevel-transforms-intensity-transformation-functions)
-		* [Changing Brightness](#changing-brightness)
-		* [Image Negative](#image-negative)
-		* [Linear Images](#linear-images)
-			* [Gamma (power law) transformation](#gamma-power-law-transformation)
-		* [Image Histograms](#image-histograms)
-		* [Contrast/Histogram Stretching](#contrasthistogram-stretching)
-			* [Dynamic Range](#dynamic-range)
-			* [Thresholding](#thresholding)
-			* [General Contrast Stretching](#general-contrast-stretching)
-			* [Highlighting intensity range](#highlighting-intensity-range)
-		* [Histogram Equalization](#histogram-equalization)
-		* [Global vs. Local Processing](#global-vs-local-processing)
-		* [Histogram Matching](#histogram-matching)
-		* [Spatial Filtering](#spatial-filtering)
-			* [Smoothing Filters](#smoothing-filters)
-			* [Average Filter (mean filter)](#average-filter-mean-filter)
-			* [Weighted Average](#weighted-average)
-			* [Gaussian Filter](#gaussian-filter)
-			* [Median Filter](#median-filter)
-		* [Image Derivatives](#image-derivatives)
-		* [Sharpening Filter - Laplacian](#sharpening-filter-laplacian)
-		* [Sobel Filter](#sobel-filter)
-	* [Topic 3 - Morphological Image Processing](#topic-3-morphological-image-processing)
-		* [Sets](#sets)
-		* [Translation](#translation)
-		* [Structuring Elements](#structuring-elements)
-		* [Fit](#fit)
-		* [Hit](#hit)
-		* [Erosion](#erosion)
-		* [Dilation](#dilation)
-		* [Opening](#opening)
-		* [Closing](#closing)
-		* [Properties of Opening and Closing](#properties-of-opening-and-closing)
-		* [Morphological Boundry Extraction](#morphological-boundry-extraction)
-		* [Morphological Region Filling/Hole Filling](#morphological-region-fillinghole-filling)
-		* [Morphological Hit-or-Miss Transform](#morphological-hit-or-miss-transform)
-		* [Morphological Corner Detection](#morphological-corner-detection)
-		* [Morphological Thinning](#morphological-thinning)
-	* [Topic 4 - Content­‐based image retrieval](#topic-4-contentbased-image-retrieval)
-		* [Traditionally](#traditionally)
-		* [Content-Based](#content-based)
-			* [Color](#color)
-				* [Quadratic Distance Measure](#quadratic-distance-measure)
-				* [Color Moments](#color-moments)
-				* [Color coherence vectors](#color-coherence-vectors)
-				* [Color correlograms](#color-correlograms)
-			* [Texture](#texture)
-				* [Local binary patterns](#local-binary-patterns)
-			* [Shape](#shape)
-				* [Patterns:](#patterns)
-		* [Image moments](#image-moments)
-			* [Invariant Moments](#invariant-moments)
-				* [Central Moments](#central-moments)
-				* [Normalized central moments](#normalized-central-moments)
-				* [(Hu's) moments invariants](#hus-moments-invariants)
-				* [(Maitra's) moment invariants](#maitras-moment-invariants)
-		* [Combining multiple features](#combining-multiple-features)
-		* [Video Retrieval](#video-retrieval)
-			* [Shot cut detection](#shot-cut-detection)
-				* [Color histograms](#color-histograms)
-			* [Key frame selection](#key-frame-selection)
-		* [Semantic Gap](#semantic-gap)
-			* [Relevance Feedback](#relevance-feedback)
-		* [Image Classification](#image-classification)
-		* [R-trees](#r-trees)
-			* [Retrieval](#retrieval)
-	* [Topic 5 - Image database visualization and browsing](#topic-5-image-database-visualization-and-browsing)
-		* [Image database browsing](#image-database-browsing)
-		* [Mapping based visualisation](#mapping-based-visualisation)
-			* [PCA (Principal component analysis)](#pca-principal-component-analysis)
-				* [<review-of-basic-stuff&gt;](#review-of-basic-stuffgt)
-				* [Procedure](#procedure)
-				* [Usage](#usage)
-				* [For Feature Reduction](#for-feature-reduction)
-				* [For (facial) recognition](#for-facial-recognition)
-				* [For image database visualisation](#for-image-database-visualisation)
-			* [MDS (Multi-dimensional scaling)](#mds-multi-dimensional-scaling)
-				* [For image database visualisation](#for-image-database-visualisation-1)
-		* [Clustering-based visualisation](#clustering-based-visualisation)
-			* [K-Means](#k-means)
-				* [For image segmentation](#for-image-segmentation)
-		* [Heiarchical clustering for image browsing](#heiarchical-clustering-for-image-browsing)
-			* [Dealing with overlap](#dealing-with-overlap)
-		* [Graph-based visualisation](#graph-based-visualisation)
-		* [Browsing](#browsing)
-			* [Horizontal browsing](#horizontal-browsing)
-				* [Panning](#panning)
-				* [Zooming](#zooming)
-				* [Magnification](#magnification)
-			* [Vertical browsing](#vertical-browsing)
-			* [Graph-based browsing](#graph-based-browsing)
-			* [Time-based browsing](#time-based-browsing)
-		* [A Browsing Application](#a-browsing-application)
-		* [Evaluation of image browsing systems](#evaluation-of-image-browsing-systems)
-			* [Target Search](#target-search)
-			* [Category search](#category-search)
-			* [Journalistic task](#journalistic-task)
-			* [Annotation task](#annotation-task)
-			* [User opinion](#user-opinion)
-		* [Summary](#summary)
-	* [Topic 6 - Colour consistancy and colour invariance](#topic-6-colour-consistancy-and-colour-invariance)
-		* [Adding Colour](#adding-colour)
-		* [Colour based image retrieval (Uses QBE)](#colour-based-image-retrieval-uses-qbe)
-			* [Advantages of colour indexing](#advantages-of-colour-indexing)
-		* [Colour image formation](#colour-image-formation)
-			* [Chromaticity space](#chromaticity-space)
-			* [Illuminants](#illuminants)
-			* [Computational colour constancy](#computational-colour-constancy)
-				* [Greyworld colour constancy](#greyworld-colour-constancy)
-				* [MaxRGB colour constancy](#maxrgb-colour-constancy)
-				* [Dichromatic reflection model](#dichromatic-reflection-model)
-				* [Matte, Lambertian or Body reflectance](#matte-lambertian-or-body-reflectance)
-				* [Highlight, specular or interface reflectance](#highlight-specular-or-interface-reflectance)
-				* [Dichromatic reflectance](#dichromatic-reflectance)
-	* [Topic 7 - Texture](#topic-7-texture)
-		* [Applications](#applications)
-		* [Texture Measures](#texture-measures)
-			* [Statistical Descriptors](#statistical-descriptors)
-			* [Co-occurrence matrix](#co-occurrence-matrix)
-			* [Co-occurance features](#co-occurance-features)
-			* [LBP (Local binary patterns)](#lbp-local-binary-patterns)
-				* [Circular LBP](#circular-lbp)
-				* [Rotation Invariant LBP](#rotation-invariant-lbp)
-				* [Uniform LBP](#uniform-lbp)
-				* [Multi-scale LBP](#multi-scale-lbp)
-				* [Multi-dimensional LBP](#multi-dimensional-lbp)
-		* [Summary](#summary-1)
-	* [Topic 8 - Image compression](#topic-8-image-compression)
-		* [Runlength coding](#runlength-coding)
-		* [Differential coding](#differential-coding)
-		* [Entropy coding - Huffman coding :D](#entropy-coding-huffman-coding-d)
-			* [Creating the table](#creating-the-table)
-		* [PNG - predictive coding](#png-predictive-coding)
-		* [JPEG compression](#jpeg-compression)
-			* [Color space](#color-space)
-			* [Frequency domain](#frequency-domain)
-			* [DCT - Discrete Cosine Transform](#dct-discrete-cosine-transform)
-				* [Examples](#examples)
-			* [Quantisation](#quantisation)
-			* [Entropy Compression](#entropy-compression)
-			* [Summary](#summary-2)
-			* [Decompression](#decompression)
-			* [Compression vs Retieval](#compression-vs-retieval)
-			* [JPEG CBIR](#jpeg-cbir)
-		* [Summary](#summary-3)
-
-<!-- /code_chunk_output -->
-
-----------------------
-
 
 ## Topic 1 - Introduction and Fundamentals
 
@@ -178,65 +5,16 @@
 
 ### Images
 
-**Image:** 2D function f(x,y)
-
-**Intensity:** f() in interval [o, L-1] with L=2<sup>k</sup>
-where:
-```javascript
-k=bitdepth
-(bpp - bits-per-pixel)
-```
-*Note:* often bpp=8 for greyscale, bpp=24 for colour images
-
-Number of bits required to store image: NxMxk
-
-
 
 **Spatial Resolution:** Measure of the smallest discernible detail in an image, line pairs per unit distance, dots (pixels) per unit distance, dots per inch (dpi)
 
 **Intensity Resolution:** Measure of the smallest discernible change in intensity level, bits per pixel (bpp), no. of graylevels
 
 **Image Interpolation:** method to increase or decrease number of pixels in image
-
 - Nearest neighbour interpolation: Copy value of nearest pixel
 - Bilinear interpolation: calculated based on weighted average of neighbours
 
 
-### Pixel Neighbourhood
-
-4-neighbours
-
-- Used to identify adjacent pixels
-- Useful for analyzing regions, edges, etc
-- Only vertical and horizontal neighbours
-
-Diagonal neighbours
-
-- Only neighbours along the diagonal
-
-8-neighbours
-
-- Considers all direct neighbours
-
-
-
-### Adjacency
-
-- V: set of intensity values to define adjacency.
-- **4-adjacency:** pixels are adjacent if values are in V and are in 4-neighbourhood.
-- **8-adjacency:** pixels are adjacent if values are in V and are in 8-neighbourhood.
-- **m-adjacency:** diagonals can only be connected if there are no 4-adjacency pixels.
-
-
-### Paths
-
-A **path** is a series of distinct pixels from a pixel at `(x,y)` to another pixel at `(s,t)`.
-
-If <code>(X<sub>0</sub>, Y<sub>0</sub>) = (X<sub>n</sub>, Y<sub>n</sub>)</code>, the path is a closed path
-
-8-paths can result in ambiguity, can be solved using m-path
-
-Pixels are **connected** if there is a **path** between them
 
 ### Regions
 
@@ -254,33 +32,6 @@ The **boundary** of a region R is the set of pixels in the region that have one 
 
 If R happens to be an entire image, then its boundary is defined as the set of pixels in the first and last rows and the columns of the image
 
-### Distances
-
-##### D<sub>4</sub>-distance (city-block/Manhattan or L<sub>1</sub> norm)
-
-Sum of x and y distances
-
-```javascript
-- - 2 - -
-- 2 1 2 -
-2 1 0 1 2
-- 2 1 2 -
-- - 2 - -
-```
-
-##### D<sub>8</sub>-distance (chessboard or max norm)
-
-Max of x and y distances
-
-```javascript
-2 2 2 2 2
-2 1 1 1 2
-2 1 0 1 2
-2 1 1 1 2
-2 2 2 2 2
-```
-
-Remember when calculating distance that diagonals require euclidean distance calculation
 
 ### Image Enhancement
 
@@ -293,9 +44,6 @@ This is an example of an image subtraction application.
 Enhanced image = image after injection with contrast medium - image before injection
 ```
 
-![Angiography](images/angiography.png)
-
-----------------------
 
 ## Topic 2 - Spatial Domain Image Processing
 
@@ -325,46 +73,6 @@ Location independent pixel processing
 - Always same value s for same value of r
 - Independent of neighbourhood pixel
 
-### Changing Brightness
-
-```javascript
-s = T(r) = c * r
-c: constant
-For colour images, multiply each channel by the same c
-```
-
-Global change of brightness (image gets brighter or darker)
-
-Might lead to saturated pixels as dynamic range is limited
-
-### Image Negative
-
-```javascript
-s = T(r) = max - r  = (L - 1) - r
-
-// Number of greylevels
-L = 1 - r // if image scaled to [0 ; 1]
-```
-
-### Linear Images
-
-Linear image = linear relationship between intensity in captured scene and pixel value (looks terrible when displayed)
-
-Monitor use an intrinsic non-linearity-gamma - R<sup>γ</sup>
-
-If a monitor applies a power of gamma, the reciprocal of gamma must be applied to linearise image RGBs:
-
-Note: images are scaled to [0;1] prior to transformation (since then the results will also be in [0 ; 1])
-
-#### Gamma (power law) transformation
-
-A linear image looks fine on a display if we apply a 1/γ gamma
-
-Displays have a range of about 100 to 1 compared to a visible range of about 10000 to 1. It follows that images are 'compressed' prior to display. Compression can lead to important detail being lost (e.g. in the shadows or highlights)
-
-Bright image: High gamma brings out details in the highlights
-
-Dark image:   Low gamma brings out details in the shadows
 
 ### Image Histograms
 
@@ -395,20 +103,6 @@ Piecewise linear transform based on pair of pixel mappings (r<sub>1</sub>, s<sub
 (r<sub>2</sub>, s<sub>2</sub>) - (max, max)
 </code></pre>
 
-#### Dynamic Range
-
-- **Input**: limited dynamic range  -  <code>(r<sub>1</sub> ; r<sub>2</sub>) r<sub>1</sub> >=0, r<sub>2</sub> <= L</code>
-
-- **Output**: full dynamic range  -  [0;L]
-
-#### Thresholding
-
-Special case of histogram stretching.
-
-**Output**: binary image
-
-- pixels below threshold -> 0
-- pixels above threshold -> 1
 
 
 #### General Contrast Stretching
@@ -645,162 +339,9 @@ Morphological image processing:
 - for simple image analysis (corner/pattern detection, boundary extraction, thinning, etc)
 - operates primarily on binary images
 
-### Sets
-
-![Sets](images/Sets.png)
-
-### Translation
-
-Image A translated by movement vector t:
-
-- A<sub>t</sub> = {c | c = a + t for some a ∈ A}
-
-### Structuring Elements
-
-SE's are small sets or sub-images used to probe an image for properties of interest
-
-Similar to filter kernels (moved across an image to inspect/process all pixels)
-
-Can have any size and shape (usually square or rectangular)
-
-![Structuring Elements](images/SE.png)
-
-SE defines a neighbourhood (similar to a filter kernel/mask) to specify which neighbouring pixels are considered.
-
-SE visits each element of a set (or image)
-
-Interact with the image through set operations to yield new image values
-
-New image value defined by
-
-- current image value
-- set operation
-- other current image values at locations covered by SE
-
-![Structuring element shapes](images/SE_Shapes.png)
-
-### Fit
-
-- All **on-pixels** (pixel = 1) in the SE cover on-pixels in the image
-
-### Hit
-
-- Any **on-pixels** in the SE covers an on-pixel in the image
-
-All morphological processing operations can be modelled based on hits and fits
-
-### Erosion
-
-The erosion of A (image) by set B (structuring element) is defined as:
-
-- A ⊖ B = {x | (x + b) ∈ A for every b ∈ B}
-- A ⊖ B: erosion of image A by structuring element B
-
-The SE B is positioned with its origin at a location in the image and the new pixel value at that location determined as:
-
-    1 (on) if B fits A
-    0 otherwise
-
-E.g.:
-
-![erosion example](images/erosion.png)
-
-![effect of erosion](images/erosion_3.png)
-
-- Erosion can split joint regions/objects and can remove extrusions
-- Erosion always shrinks regions/objects
-
-E.g.:
-
-![erosion splitting two objects. Also removing extrusions](images/erosion_2.png)
-
-### Dilation
-
-The dilation of A (image) by set B (structuring element) is defined as:
-
-`A ⊕ B = {x | x = a + b for some a ∈ A and b ∈ B}`
-`A ⊕ B: dilation of image A by structuring element B`
-
-The SE B is positioned with its origin at a location in the image and the new pixel value at that location determined as:
-
-```
-1 (on) if B hits A
-0 otherwise
-```
-
-E.g.
-
-![dilation example](images/dilation.png)
-
-![another dilation example](images/dilation_3.png)
-
-- Dilation can repair gaps/breaks and can fill intrusions
-- Dilation always enlarges regions/objects
-
-E.g.
-
-![dilation fixing a gap and removing intrusions](images/dilation_2.png)
-
-**Note:**
-
-- Dilation is not the inverse of erosion
-- Erosion is not the inverse of dilation
-
-### Opening
-Morphological opening combines erosion and dilation
-
-Opening = erosion followed by dilation with the same SE
-
-- A ○ B = (A ⊖ B) ⊕ B
-
-Morphological shrinking followed by morphological expansion
-
-![image being opened](images/opening.png)
-
-Opening:
-
-- smoothes object boundaries
-- eliminates extrusions
-- can split objects apart
-- removes isolated pixels/pixel groups
-
-### Closing
-
-Morphological closing combines dilation and erosion
-
-Closing = dilation followed by erosion with the same SE
-
-- A ● B = (A ⊕ B) ⊖ B
-
-Morphological expansion followed by morphological shrinking
-
-![alt text](images/closing.png)
-
-Closing:
-
-- smoothes object boundaries
-- eliminates extrusions
-- can link closely objects
-- removes holes
-
-**Note:**
-
-- Closing is not the inverse of opening
-- Opening is not the inverse of closing
-
-### Properties of Opening and Closing
-
-**Properties of Morphological opening:**
-
-- A ○ B is a subset (sub-image) of A
-- If C is a subset of D, then C ○ B is a subset of D ○ B
-- (A ○ B) ○ B = A ○ B
-
-**Properties of Morphological Closing:**
-
-- A is a subset (sub-image) of A ● B
-- If C is a subset of D, then C ● B is a subset of D ● B
-- (A ● B) ● B = A ● B
+### Fit & HIT
+FIT = ALL
+HIT = ANY
 
 ### Morphological Boundry Extraction
 
@@ -888,7 +429,7 @@ E.g.
 
 ----------------------
 
-## Topic 4 - Content­‐based image retrieval
+## Topic 4 - Content‐based image retrieval
 
 [PDF](http://learn.lboro.ac.uk/pluginfile.php/480347/mod_resource/content/6/COC202_1718_lect_04.pdf)
 
