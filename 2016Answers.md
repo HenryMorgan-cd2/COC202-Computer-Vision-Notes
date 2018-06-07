@@ -15,7 +15,7 @@ Used to reduce random noise, such as salt and pepper noise, and blurr an image, 
 (pixels are widely distrbuted)
    
 7. Function to create an equalized histogram of an image, useful for compairing images with different illumination etc
-7. Performs historgram equalization on an image `im`.
+   7. Performs historgram equalization on an image `im`.
 
 8.   0 1 2 3
    0 1 1 0 1
