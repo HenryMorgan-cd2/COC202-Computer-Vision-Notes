@@ -33,24 +33,6 @@ Enhanced image = image after injection with contrast medium - image before injec
 
 ### Contrast/Histogram Stretching
 
-Piecewise linear transform based on pair of pixel mappings (r<sub>1</sub>, s<sub>1</sub>) and (r,<sub>2</sub>, s<sub>2</sub>)
-
-> Piecewise function: a function consisting of multiple subfunctions.
-> Think **batman** graph.
-
-- Linear interpolation
-<pre><code>
-(0, 0) - (r<sub>1</sub>, s<sub>1</sub>)
-(r<sub>1</sub>, s<sub>1</sub>) - (r,<sub>2</sub>, s<sub>2</sub>)
-(r<sub>2</sub>, s<sub>2</sub>) - (max, max)
-</code></pre>
-
-#### Dynamic Range
-
-- **Input**: limited dynamic range  -  <code>(r<sub>1</sub> ; r<sub>2</sub>) r<sub>1</sub> >=0, r<sub>2</sub> <= L</code>
-
-- **Output**: full dynamic range  -  [0;L]
-
 #### General Contrast Stretching
 ![General contrast stretching graph](images/generalcontraststretching.png)
 
