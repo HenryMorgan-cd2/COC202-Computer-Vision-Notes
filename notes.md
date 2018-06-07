@@ -287,6 +287,7 @@ Remember when calculating distance that diagonals require euclidean distance cal
 Noise can be reduced by averaging many noisy images together
 
 #### Digital subtraction angiography
+This is an example of an image subtraction application.
 
 ```javascript
 Enhanced image = image after injection with contrast medium - image before injection
