@@ -91,14 +91,6 @@ Mapping:
 
 ### Global vs. Local Processing
 
-Global histogram equalization modifies the complete image with the resulting mapping of intensities being the same of all pixels in the image.
-
-Processing can also be conducted on local scale, affecting a subset (region) of the image
-
-A neighbourhood (usually either square or circular in shape) is defined with its centre being moved from pixel to pixel
-
-At each pixel location, the histogram of the points in the neighbourhood is computed and histogram equalization performed to identify the mapping **for that pixel only**
-
 ### Histogram Matching
 
 Histogram equalization is a special case of histogram specification/histogram matching
@@ -114,53 +106,6 @@ Histogram equalization is a special case of histogram specification/histogram ma
 - Identified greylevel then gives the mapping: G<sub>1</sub> -> G<sub>2</sub>
 
 ### Spatial Filtering
-
-#### Smoothing Filters
-
-- "Smooths" the image
-- Used for blurring and noise reduction
-- Used in preprocessing for:
-    - removal of small details from an image (e.g prior to object extraction)
-    - bridging of small gaps in lines or curves
-    - reducing the effect of image noise
-
-#### Average Filter (mean filter)
-
-- Output = average of pixels contained in the neighbourhood of the filter mask
-```javascript
-        1   1   1
-1/9  x  1   1   1
-        1   1   1
-```
-
-#### Weighted Average
-- Reduces the effect of blurring
-- Different weights assigned to the coefficients in the kernel
-- centre pixel most important (should be preserved)
-
-```javascript
-         1   2   1
-1/16  *  2   4   2
-         1   2   1
-```
-#### Gaussian Filter
-
-- Useful for smoothing images (better than mean filtering)
-- `g(x, y) = e ^ (-(x^2 + Y^2)/2σ^2)`
-
-```javascript
-            1  4   7   4   1
-            4  16  26  16  4
-1/273  x    7  26  41  26  7
-            4  16  26  16  4
-            1  4   7   4   1
-```
-
-#### Median Filter
-
-- Non-linear filter that replaces the value of a pixel with the **median** of the values in the mask of the filter
-- Useful for removing/reducing certain types of random noise (impulse noise, random occurrences of black and white pixels, salt and pepper noise)
-- Will lead to less blurring compared to averaging
 
 ### Image Derivatives
 
@@ -186,41 +131,6 @@ Same for image - along one (x) dimension:
 	- zero-crossings indicate edges
 
 ### Sharpening Filter - Laplacian
-
-> Slide 60 for Laplacian Filter derivation
-
-<code>∇<sup>2</sup>f = f(x + 1, y) +f(x - 1, y) + f(x, y + 1) + f(x, y - 1) - 4f(x, y)</code>
-
-Resulting Laplacian Filter:
-```javascript
-0   1   0
-1  -4   1
-0   1   0
-```
-
-Taking into account diagonal neighbours:
-
-```javascript
-1   1   1
-1  -8   1
-1   1   1
-```
-- The filtered image shows where the intensity changes; "flat" for constant or slowly varying intensity
-- Can be used to identify edges
-
-**Laplacian for Sharpening:**
-
-Output is low (negative) for edges and other abrupt changes, can be used to sharpen images
-Idea: emphasise pixels identified by Laplacian (edges etc)
-
-- Sharpened image = Original image - Laplacian Image
-- Sharpening Filter:
-
-```
- 0  -1   0      0   0   0       0   1   0
--1   5  -1  =   0   1   0   -   1  -4   1
- 0  -1   0      0   0   0       0   1   0
-```
 
 **Unsharp Masking:**
 
@@ -1536,78 +1446,6 @@ Steps:
 - DCT
 - quantisation (lossy part)
 - entropy coding (runlength / differential / huffman)
-
-#### Color space
-Humans can see changes in brightness but not color.
-Instead of RGB its more practical to store luminance and chrominance.
-
-Enter YCbCr color space.
-- Y: intensity
-- Cb: yellow-blue
-- Cr: red-green
-
-Its a linear transform of RGB
-![RGB to YCbCr matrix transorm](images/ycrcbtorgb.png)
-
-Chrominance infomation can be reduced without significant visual loss.
-Downsample Cb and Cr by a factor of 2 along each axis.
-
-#### Frequency domain
-Instead of thinking spatially in terms of pixels, we instead think of the frequency and amplitude of intensity changes.
-
-The human visual system is very good at perceiving changes in low frequency information but not high frequency - therefore: crush the highs and let the lows will survive.
-
-#### DCT - Discrete Cosine Transform
-DCT converts absolute values into amplitudes of frequency bands.
-
-Images are split into 8x8 blocks and DCT is applied to each block.
-
-- A level shift is applied to transform the 0-255 range into -128-127
-- since images are 2d, 2d DCT is used.
-
-![DCT formula](images/dct.png)
--	G<sub>u,v</sub> is the DCT coefficient at (u,v)
--	g<sub>x,y</sub> is the pixel value at (x,y)
-
-DCT transform coefficients:
-![DCT transform coefficients](images/dcttransformcoefficients.png)
-
-Each cell represents the frequency the coefficient at that location represents
-- top-left: DC coefficient
-- others: AC coefficients
-
-##### Examples
-![DCT example of coefficients](images/dctexample1.png)
-![DCT example of coefficients](images/dctexample2.png)
-![DCT example of coefficients](images/dctexample3.png)
-
-#### Quantisation
-the process of constraining a large number to a small number by rounding
-
-<center><code>y = round(V/q)</code></center><br/>
-where: V is the original and q is the quantisation factor.
-
-Multiplying the result by q obtains a value close to the original.
-
-`round(53 / 10) * 10 ≈ 53`
-
-**This process is lossy**
-
-- JPEG has 2 quantisation tables.
-	- luminance
-	- chrominance
-- These tables define quantisation factors for each of the 8x8 DCT coefficients.
-	- Higher values for higher frequencies
-
-These quantisation factors are scaled by a quality factor (q factor) between 1-100. This gives the user control of **quality vs file size**.
-
-> Slide 32 contains an example of the tables. They are just large matricies of values. with the final quantised values one containing alot of 0s as the process are removed alot of data from the orginal .
-
-> Slide 33 contains examples of jpeg images at different quality levels.
-> Q=95 is pretty good
-> Q=5 is nauseating
-
-
 
 #### Entropy Compression
 - DC values are differentially coded (difference to previous DC value).
