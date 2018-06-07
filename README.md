@@ -1416,10 +1416,11 @@ Similar images will get projected to similar locations
 - similar images are grouped together
 - groups can be summarised by representative images.
 <br />
+
 - Content-based
-	- using CBIR features of the images
+  - using CBIR features of the images
 - Metadata-based
-	- Uses keywords
+  - Uses keywords
 	- filenames
 	- etc
 - Time-based
